@@ -1,1 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KL Study Prompt Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --crimson:#70110C; --crimson-dark:#4d0000; --crimson-light:#8a1a14;
+  --gold:#FFD700; --gold-light:#FFE84D; --gold-dark:#CCB000;
+  --white:#ffffff; --off-white:#fdfaf4; --gray-light:#f5f0e6;
+  --gray-mid:#cec5b4; --gray-text:#3a2a20;
+  --shadow:0 4px 24px rgba(112,17,12,0.13);
+  --shadow-gold:0 4px 20px rgba(255,215,0,0.3);
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:var(--off-white);color:var(--gray-text);min-height:100vh;display:flex;flex-direction:column;}
 
+/* ── TOP NAV BAR ── */
+.tool-nav{background:#2a0000;padding:0 24px;border-bottom:1px solid rgba(255,215,0,0.18);}
+.tool-nav-inner{max-width:900px;margin:0 auto;height:46px;display:flex;align-items:center;justify-content:space-between;}
+.tool-nav-home{display:inline-flex;align-items:center;gap:6px;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.78);text-decoration:none;letter-spacing:0.3px;transition:color 0.2s;}
+.tool-nav-home:hover{color:var(--gold-light);}
+.tool-nav-logo{font-size:0.8rem;font-weight:900;color:#fff;letter-spacing:-0.2px;}
+.tool-nav-logo span{color:var(--gold-light);}
+.tool-nav-hiw{background:none;border:none;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.65);letter-spacing:0.3px;transition:color 0.2s;padding:0;}
+.tool-nav-hiw:hover{color:var(--gold-light);}
+
+/* ── HEADER ── */
+header{background:#70110C;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,215,0,0.13);}
+header::after{content:'';position:absolute;bottom:-50px;left:8%;width:220px;height:220px;border-radius:50%;background:rgba(255,215,0,0.08);}
+.header-inner{max-width:900px;margin:0 auto;padding:36px 24px 28px;position:relative;z-index:1;text-align:center;}
+.header-badge{display:inline-block;background:var(--gold);color:var(--crimson-dark);font-size:9.5px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:12px;}
+header h1{font-size:clamp(1.6rem,4vw,2.5rem);font-weight:900;color:#fff;line-height:1.15;letter-spacing:-0.5px;}
+header h1 span{color:var(--gold-light);}
+header p{margin-top:8px;font-size:0.88rem;color:rgba(255,255,255,0.8);font-weight:500;max-width:520px;margin-left:auto;margin-right:auto;}
+
+/* ── PROGRESS BAR ── */
+.progress-bar-wrap{background:rgba(0,0,0,0.25);height:4px;}
+.progress-bar-fill{height:4px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));width:0%;transition:width 0.5s ease;border-radius:0 2px 2px 0;}
+
+/* ── SELECTION SUMMARY RIBBON ── */
+.ribbon{background:var(--crimson-dark);padding:10px 24px;display:none;}
+.ribbon.visible{display:block;}
+.ribbon-inner{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.ribbon-label{font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-right:4px;}
+.ribbon-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 12px 3px 8px;border-radius:20px;font-size:0.72rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.ribbon-chip.rc{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.ribbon-chip.rc:hover{background:rgba(255,255,255,0.28);}
+.ribbon-chip .rc-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+
+/* ── STEPPER ── */
+.stepper-wrap{max-width:900px;margin:0 auto;padding:24px 24px 0;}
+.stepper{display:flex;align-items:center;}
+.step{display:flex;align-items:center;gap:7px;flex:1;position:relative;}
+.step:not(:last-child)::after{content:'';flex:1;height:2px;background:var(--gray-mid);margin:0 4px;transition:background 0.4s;}
+.step.done:not(:last-child)::after{background:var(--gold);}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--gray-mid);color:#fff;font-size:0.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.3s;border:2px solid transparent;cursor:default;}
+.step.done .step-num{background:var(--gold);color:var(--crimson-dark);cursor:pointer;}
+.step.done .step-num:hover{transform:scale(1.1);}
+.step.active .step-num{background:var(--crimson);border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,215,0,0.22);}
+.step-label{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--gray-mid);white-space:nowrap;transition:color 0.3s;}
+.step.active .step-label{color:var(--crimson);}
+.step.done .step-label{color:var(--gold-dark);}
+
+/* ── MAIN ── */
+.main{max-width:900px;margin:22px auto 0;padding:0 24px;flex:1;}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:32px 36px;border-top:4px solid var(--crimson);animation:fadeUp 0.35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.card-title{font-size:1rem;font-weight:800;color:var(--crimson);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;}
+.card-subtitle{font-size:0.83rem;color:var(--gray-text);margin-bottom:22px;font-weight:500;line-height:1.5;}
+
+/* ── SUBJECT TIP ── */
+.subject-tip{display:none;background:linear-gradient(135deg,#fffde6,#fff8b0);border:1px solid var(--gold-dark);border-radius:10px;padding:10px 14px;margin-bottom:18px;font-size:0.8rem;font-weight:600;color:#7a6000;line-height:1.5;}
+.subject-tip.show{display:block;}
+.subject-tip strong{color:var(--crimson);}
+
+/* ── GRADE GRID ── */
+.grade-grid{display:flex;flex-wrap:wrap;gap:9px;}
+.grade-btn{padding:9px 20px;border-radius:30px;border:2px solid var(--gray-mid);background:#fff;color:var(--gray-text);font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.grade-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+.grade-btn.selected{background:var(--crimson);border-color:var(--crimson);color:#fff;box-shadow:0 3px 12px rgba(112,17,12,0.28);}
+
+/* ── LEVEL SELECTOR ── */
+.level-section{margin-top:0;overflow:hidden;max-height:0;opacity:0;transition:max-height 0.45s ease,opacity 0.35s ease,margin-top 0.35s ease;}
+.level-section.visible{max-height:400px;opacity:1;margin-top:22px;}
+.level-divider{height:1px;background:linear-gradient(90deg,var(--crimson),var(--gold),transparent);margin-bottom:20px;}
+.level-label{font-size:0.8rem;font-weight:800;color:var(--gray-text);margin-bottom:12px;letter-spacing:0.2px;}
+.level-label span{color:var(--crimson);}
+.level-grid{display:flex;gap:10px;flex-wrap:wrap;}
+.level-btn{flex:1;min-width:120px;padding:12px 10px;border-radius:12px;border:2px solid var(--gray-mid);background:#fff;cursor:pointer;transition:all 0.2s;text-align:center;font-family:'Montserrat',sans-serif;}
+.level-btn:hover{border-color:var(--gold);transform:translateY(-2px);}
+.level-btn.selected{border-color:var(--gold);background:linear-gradient(135deg,#fffde6,#fff5a0);box-shadow:var(--shadow-gold);}
+.level-icon{font-size:1.4rem;display:block;margin-bottom:4px;}
+.level-name{font-size:0.75rem;font-weight:800;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.4px;}
+.level-desc{font-size:0.68rem;font-weight:500;color:#888;margin-top:2px;line-height:1.3;}
+.level-btn.selected .level-name{color:var(--gold-dark);}
+
+/* ── SUBJECT GRID ── */
+.subject-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:11px;}
+.subject-btn{padding:15px 10px;border-radius:13px;border:2px solid var(--gray-mid);background:#fff;cursor:pointer;transition:all 0.22s;text-align:center;font-family:'Montserrat',sans-serif;position:relative;}
+.subject-btn:hover{border-color:var(--crimson);box-shadow:var(--shadow);transform:translateY(-2px);}
+.subject-btn.selected{border-color:var(--crimson);background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));box-shadow:0 4px 16px rgba(112,17,12,0.33);transform:translateY(-2px);}
+.subject-icon{font-size:1.7rem;display:block;margin-bottom:5px;}
+.subject-name{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--gray-text);line-height:1.3;}
+.subject-btn.selected .subject-name{color:#fff;}
+
+/* ── TOPIC CARDS ── */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:9px;}
+.topic-card{padding:11px 14px;border-radius:10px;border:2px solid var(--gray-mid);background:#fff;cursor:pointer;transition:all 0.18s;text-align:left;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:600;color:var(--gray-text);line-height:1.35;}
+.topic-card:hover{border-color:var(--crimson);color:var(--crimson);transform:translateY(-1px);}
+.topic-card.selected{border-color:var(--crimson);background:var(--crimson);color:#fff;box-shadow:0 3px 12px rgba(112,17,12,0.25);}
+
+/* ── CONTEXT BOX ── */
+.context-section{margin-top:22px;}
+.context-label{font-size:0.75rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-text);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.context-label span{font-weight:600;text-transform:none;letter-spacing:0;font-size:0.72rem;color:#999;background:var(--gray-light);padding:2px 8px;border-radius:10px;}
+.context-input{width:100%;padding:12px 15px;border-radius:10px;border:2px solid var(--gray-mid);font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:500;color:var(--gray-text);background:#fff;resize:vertical;min-height:70px;transition:border 0.2s;line-height:1.5;}
+.context-input:focus{outline:none;border-color:var(--crimson);}
+.context-input::placeholder{color:#bbb;}
+
+/* ── ACTIVITY GRID ── */
+.activity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;}
+.activity-btn{padding:14px 10px;border-radius:12px;border:2px solid var(--gray-mid);background:#fff;cursor:pointer;transition:all 0.2s;text-align:center;font-family:'Montserrat',sans-serif;position:relative;}
+.activity-btn:hover{border-color:var(--gold);transform:translateY(-2px);}
+.activity-btn:hover .activity-tooltip{opacity:1;pointer-events:auto;transform:translateY(0);}
+.activity-btn.selected{border-color:var(--gold);background:linear-gradient(135deg,#fffde6,#fff5a0);box-shadow:var(--shadow-gold);}
+.activity-icon{font-size:1.45rem;display:block;margin-bottom:5px;}
+.activity-name{font-size:0.73rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--gray-text);line-height:1.3;}
+.activity-btn.selected .activity-name{color:var(--gold-dark);}
+.activity-tooltip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:#1a0008;color:#f5e8c0;font-size:0.7rem;font-weight:600;padding:7px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:all 0.2s;z-index:10;border:1px solid var(--gold-dark);max-width:180px;white-space:normal;text-align:center;line-height:1.4;}
+.activity-tooltip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a0008;}
+
+/* ── NAV BUTTONS ── */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:12px;}
+.btn-back{padding:11px 24px;border-radius:30px;border:2px solid var(--gray-mid);background:transparent;font-family:'Montserrat',sans-serif;font-size:0.83rem;font-weight:700;color:var(--gray-text);cursor:pointer;transition:all 0.2s;}
+.btn-back:hover{border-color:var(--crimson);color:var(--crimson);}
+.btn-next{padding:12px 34px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;font-family:'Montserrat',sans-serif;font-size:0.86rem;font-weight:800;letter-spacing:0.5px;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 16px rgba(112,17,12,0.33);}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(112,17,12,0.43);}
+.btn-next:disabled{background:var(--gray-mid);box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-generate{padding:13px 36px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);font-family:'Montserrat',sans-serif;font-size:0.88rem;font-weight:900;letter-spacing:0.5px;cursor:pointer;transition:all 0.22s;box-shadow:var(--shadow-gold);}
+.btn-generate:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(255,215,0,0.52);}
+.btn-generate:disabled{background:var(--gray-mid);color:#fff;box-shadow:none;cursor:not-allowed;transform:none;}
+
+/* ── PROMPT OUTPUT ── */
+.prompt-output-wrap{animation:fadeUp 0.4s ease;}
+.prompt-label{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold-dark);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.prompt-label::after{content:'';flex:1;height:1px;background:var(--gold-light);}
+.prompt-box{background:linear-gradient(135deg,#1a0008,#2d0010);border:1px solid var(--gold-dark);border-radius:14px;padding:22px 24px;}
+.prompt-text{font-family:'Montserrat',sans-serif;font-size:0.85rem;font-weight:500;color:#f5e8c0;line-height:1.8;white-space:pre-wrap;word-break:break-word;}
+.copy-row{display:flex;justify-content:flex-end;gap:10px;margin-top:14px;align-items:center;}
+.copy-notice{font-size:0.76rem;font-weight:600;color:var(--gold-dark);opacity:0;transition:opacity 0.4s;}
+.copy-notice.show{opacity:1;}
+.btn-copy{display:flex;align-items:center;gap:7px;padding:9px 22px;border-radius:30px;border:2px solid var(--gold);background:transparent;color:var(--gold-dark);font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;transition:all 0.2s;}
+.btn-copy:hover{background:var(--gold);color:var(--crimson-dark);}
+
+/* ── CHATBOT TIPS ── */
+.chatbot-tips{margin-top:20px;background:var(--gray-light);border-radius:12px;padding:16px 20px;}
+.tips-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--crimson);margin-bottom:10px;}
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px;}
+.tip-item{display:flex;gap:8px;align-items:flex-start;font-size:0.76rem;font-weight:600;color:var(--gray-text);line-height:1.4;}
+.tip-dot{width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--crimson-dark);font-size:0.65rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* ── HISTORY ── */
+.history-section{margin-top:18px;}
+.history-title{font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-text);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.history-title::after{content:'';flex:1;height:1px;background:var(--gray-mid);}
+.history-list{display:flex;flex-direction:column;gap:7px;}
+.history-item{background:var(--gray-light);border-radius:10px;padding:10px 14px;cursor:pointer;transition:all 0.18s;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.history-item:hover{background:#f0e8d8;border-left:3px solid var(--crimson);}
+.history-meta{font-size:0.74rem;font-weight:700;color:var(--gray-text);line-height:1.4;}
+.history-meta span{color:var(--crimson);font-weight:800;}
+.history-reuse{font-size:0.7rem;font-weight:700;color:var(--gold-dark);white-space:nowrap;}
+
+/* ── SUMMARY CHIPS ── */
+.summary-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+.chip{padding:4px 12px;border-radius:20px;font-size:0.72rem;font-weight:700;letter-spacing:0.3px;}
+.chip-crimson{background:var(--crimson);color:#fff;}
+.chip-gold{background:var(--gold);color:var(--crimson-dark);}
+.chip-outline{border:1.5px solid var(--gray-mid);color:var(--gray-text);}
+.chip-green{background:#e6f9f0;color:#1a7a4a;border:1.5px solid #9fdfc4;}
+
+/* ── FOOTER ── */
+footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
+.footer-inner{max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:24px;}
+.footer-brand{color:#fff;}
+.footer-brand h3{font-size:1rem;font-weight:900;letter-spacing:-0.3px;margin-bottom:4px;}
+.footer-brand h3 span{color:var(--gold-light);}
+.footer-brand p{font-size:0.75rem;color:rgba(255,255,255,0.6);max-width:280px;line-height:1.6;margin-bottom:10px;}
+.footer-home-link{display:inline-flex;align-items:center;gap:5px;font-size:0.74rem;font-weight:700;color:var(--gold-light);text-decoration:none;transition:color 0.2s;}
+.footer-home-link:hover{color:#fff;}
+.footer-links{display:flex;flex-direction:column;gap:6px;}
+.footer-links-title{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:4px;}
+.footer-link{font-size:0.76rem;font-weight:600;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+.footer-link:hover{color:var(--gold-light);}
+.footer-link-btn{background:none;border:none;cursor:pointer;text-align:left;padding:0;font-family:'Montserrat',sans-serif;font-size:0.76rem;font-weight:600;color:rgba(255,255,255,0.7);transition:color 0.2s;}
+.footer-link-btn:hover{color:var(--gold-light);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);max-width:900px;margin:18px auto 0;padding-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-bottom p{font-size:0.7rem;color:rgba(255,255,255,0.45);font-weight:500;}
+.version-badge{background:rgba(255,215,0,0.2);color:var(--gold-light);font-size:0.65rem;font-weight:800;letter-spacing:1px;padding:3px 10px;border-radius:10px;border:1px solid rgba(255,215,0,0.3);}
+
+/* ── HIDDEN ── */
+.hidden{display:none!important;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .card{padding:22px 16px;}
+  .subject-grid{grid-template-columns:repeat(3,1fr);}
+  .topic-grid{grid-template-columns:repeat(2,1fr);}
+  .activity-grid{grid-template-columns:repeat(2,1fr);}
+  .level-grid{flex-direction:column;}
+  .step-label{display:none;}
+  .tips-grid{grid-template-columns:1fr;}
+  .footer-inner{flex-direction:column;}
+  .tool-nav-logo{display:none;}
+}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,0,4,0.78);backdrop-filter:blur(5px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s ease;}
+.modal-overlay.open{opacity:1;pointer-events:auto;}
+.modal-box{background:#fff;border-radius:20px;max-width:500px;width:100%;padding:38px 34px 32px;position:relative;transform:translateY(24px) scale(0.97);transition:transform 0.38s cubic-bezier(.22,.9,.36,1);border-top:5px solid var(--crimson);box-shadow:0 28px 70px rgba(112,17,12,0.28);}
+.modal-overlay.open .modal-box{transform:translateY(0) scale(1);}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.6rem;color:var(--gray-mid);cursor:pointer;line-height:1;transition:color 0.2s;font-family:'Montserrat',sans-serif;}
+.modal-close:hover{color:var(--crimson);}
+.modal-badge{display:inline-block;background:var(--crimson);color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 13px;border-radius:20px;margin-bottom:14px;}
+.modal-icon{font-size:2.8rem;margin-bottom:10px;line-height:1;}
+.modal-title{font-size:1.25rem;font-weight:900;color:var(--crimson-dark);margin-bottom:10px;line-height:1.2;}
+.modal-desc{font-size:0.85rem;font-weight:500;color:var(--gray-text);line-height:1.68;margin-bottom:20px;}
+.modal-steps{display:flex;flex-direction:column;gap:11px;margin-bottom:20px;}
+.modal-step{display:flex;gap:13px;align-items:flex-start;}
+.modal-step-num{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.modal-step-text{font-size:0.82rem;font-weight:600;color:var(--gray-text);line-height:1.55;}
+.modal-step-text strong{color:var(--crimson-dark);}
+.modal-tip{background:linear-gradient(135deg,#fffde6,#fff8b0);border:1px solid var(--gold-dark);border-radius:10px;padding:12px 15px;font-size:0.79rem;font-weight:600;color:#7a6000;line-height:1.6;margin-bottom:24px;}
+.modal-tip strong{color:var(--crimson);}
+.modal-cta{width:100%;padding:14px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 18px rgba(112,17,12,0.32);letter-spacing:0.4px;}
+.modal-cta:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(112,17,12,0.44);}
+@media(max-width:500px){.modal-box{padding:28px 18px 24px;}.modal-title{font-size:1.05rem;}}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<div class="tool-nav">
+  <div class="tool-nav-inner">
+    <a class="tool-nav-home" href="index.html">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Home
+    </a>
+    <div class="tool-nav-logo">Kappa League <span>Study Tools</span></div>
+    <button class="tool-nav-hiw" onclick="openPopup('hiw')">How It Works</button>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-badge">Kappa League · Academic Tools</div>
+    <h1>Study <span>Prompt</span> Generator</h1>
+    <p>Build powerful, token-efficient AI tutor prompts in seconds — tailored to your grade, level, subject, and goal.</p>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+</header>
+
+<!-- RIBBON -->
+<div class="ribbon" id="ribbon">
+  <div class="ribbon-inner" id="ribbonInner"></div>
+</div>
+
+<!-- STEPPER -->
+<div class="stepper-wrap">
+  <div class="stepper">
+    <div class="step active" id="s1"><div class="step-num" onclick="jumpStep(1)">1</div><div class="step-label">Grade</div></div>
+    <div class="step" id="s2"><div class="step-num" onclick="jumpStep(2)">2</div><div class="step-label">Subject</div></div>
+    <div class="step" id="s3"><div class="step-num" onclick="jumpStep(3)">3</div><div class="step-label">Topic</div></div>
+    <div class="step" id="s4"><div class="step-num" onclick="jumpStep(4)">4</div><div class="step-label">Activity</div></div>
+    <div class="step" id="s5"><div class="step-num" onclick="jumpStep(5)">5</div><div class="step-label">Prompt</div></div>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- STEP 1 -->
+  <div class="card" id="step1">
+    <div class="card-title">Step 1 — Select Your Grade</div>
+    <div class="card-subtitle">Choose the grade you are currently in.</div>
+    <div class="grade-grid">
+      <button class="grade-btn" onclick="selectGrade(this,'6th Grade')">6th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'7th Grade')">7th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'8th Grade')">8th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'9th Grade')">9th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'10th Grade')">10th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'11th Grade')">11th Grade</button>
+      <button class="grade-btn" onclick="selectGrade(this,'12th Grade')">12th Grade</button>
+    </div>
+    <div class="nav-row"><div></div><button class="btn-next" id="next1" onclick="goStep(2)" disabled>Next →</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card hidden" id="step2">
+    <div class="card-title">Step 2 — Subject & Skill Level</div>
+    <div class="card-subtitle">Pick your subject, then tell us your skill level <em>for that subject</em> — you might be advanced in one and struggling in another.</div>
+    <div class="subject-grid">
+      <button class="subject-btn" onclick="selectSubject(this,'Math')"><span class="subject-icon">➗</span><div class="subject-name">Math</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Science')"><span class="subject-icon">🔬</span><div class="subject-name">Science</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'ELA')"><span class="subject-icon">📖</span><div class="subject-name">Language Arts</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Social Studies')"><span class="subject-icon">🌍</span><div class="subject-name">Social Studies</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'History')"><span class="subject-icon">🏛️</span><div class="subject-name">History</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Business')"><span class="subject-icon">💼</span><div class="subject-name">Business</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Python')"><span class="subject-icon">🐍</span><div class="subject-name">Python Coding</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Web Development')"><span class="subject-icon">🌐</span><div class="subject-name">Web Development</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Accounting')"><span class="subject-icon">📊</span><div class="subject-name">Accounting</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Finance')"><span class="subject-icon">💰</span><div class="subject-name">Finance</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Music Production')"><span class="subject-icon">🎵</span><div class="subject-name">Music Prompting</div></button>
+      <button class="subject-btn" onclick="selectSubject(this,'Video Production')"><span class="subject-icon">🎬</span><div class="subject-name">Video Prompting</div></button>
+    </div>
+    <div class="level-section hidden" id="levelSection">
+      <div class="level-divider"></div>
+      <div class="level-label">How are you doing in <span id="levelSubjectName">this subject</span>?</div>
+      <div class="level-grid">
+        <button class="level-btn" onclick="selectLevel(this,'Struggling','Keep it very simple. Use basic language, short sentences, and extra encouragement.')">
+          <span class="level-icon">🌱</span><div class="level-name">Struggling</div><div class="level-desc">I need extra help & simple explanations</div>
+        </button>
+        <button class="level-btn" onclick="selectLevel(this,'On Level','Use standard grade-level language and a normal pace.')">
+          <span class="level-icon">📘</span><div class="level-name">On Level</div><div class="level-desc">I understand the basics, building skills</div>
+        </button>
+        <button class="level-btn" onclick="selectLevel(this,'Advanced','Use more precise academic language. I can handle deeper explanations and complexity.')">
+          <span class="level-icon">🚀</span><div class="level-name">Advanced</div><div class="level-desc">I'm ahead and want a deeper challenge</div>
+        </button>
+      </div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(1)">← Back</button>
+      <button class="btn-next" id="next2" onclick="goStep(3)" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card hidden" id="step3">
+    <div class="card-title">Step 3 — Select a Topic</div>
+    <div class="card-subtitle">Choose the specific topic you need help with.</div>
+    <div class="subject-tip" id="subjectTip"></div>
+    <div class="topic-grid" id="topicGrid"></div>
+    <div class="context-section">
+      <div class="context-label">Add context for a better prompt <span>Optional</span></div>
+      <textarea class="context-input" id="contextInput" placeholder="e.g. We just finished Chapter 5 on linear equations... my teacher wants us to focus on word problems... I have a test on Friday about cell division..."></textarea>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(2)">← Back</button>
+      <button class="btn-next" id="next3" onclick="goStep(4)" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="card hidden" id="step4">
+    <div class="card-title">Step 4 — Pick a Learning Activity</div>
+    <div class="card-subtitle">How should the AI tutor help you? Hover over any activity to see what it does.</div>
+    <div class="activity-grid">
+      <button class="activity-btn" onclick="selectActivity(this,'Explain It')"><span class="activity-icon">📝</span><div class="activity-name">Explain It</div><div class="activity-tooltip">Break the concept into overview, key terms, and a relatable analogy. Great for first-time learning.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Quiz Me')"><span class="activity-icon">❓</span><div class="activity-name">Quiz Me</div><div class="activity-tooltip">5-question mixed quiz (multiple choice + short answer) with a full answer key at the end.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Study Guide')"><span class="activity-icon">📋</span><div class="activity-name">Study Guide</div><div class="activity-tooltip">Structured overview: key concepts, vocabulary, and "Remember This" tips — great for review night.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Real-World Examples')"><span class="activity-icon">🌟</span><div class="activity-name">Real-World Examples</div><div class="activity-tooltip">3 relatable real-life examples that show why this topic actually matters outside school.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Practice Problems')"><span class="activity-icon">✏️</span><div class="activity-name">Practice Problems</div><div class="activity-tooltip">3 problems with full step-by-step solutions. Perfect for homework and skill-building.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Flashcard Set')"><span class="activity-icon">🃏</span><div class="activity-name">Flashcard Set</div><div class="activity-tooltip">8 Q&A flashcard pairs from basic to advanced — copy into Quizlet or study straight from the chat.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Common Mistakes')"><span class="activity-icon">⚠️</span><div class="activity-name">Common Mistakes</div><div class="activity-tooltip">Top 5 errors students make on this topic, why they happen, and quick fixes for each.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Mini Project')"><span class="activity-icon">🚀</span><div class="activity-name">Mini Project</div><div class="activity-tooltip">One hands-on project that applies the skill. Includes steps, tools needed, and learning goals.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Summarize For Me')"><span class="activity-icon">📌</span><div class="activity-name">Summarize For Me</div><div class="activity-tooltip">A tight, organized summary — perfect when you finished reading but want the key points locked in.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Help Me Write')"><span class="activity-icon">✍️</span><div class="activity-name">Help Me Write</div><div class="activity-tooltip">Guided writing support: structure, opening, transitions, and what to include for strong writing.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Exam Review')"><span class="activity-icon">🎯</span><div class="activity-name">Exam Review</div><div class="activity-tooltip">Test-prep package: likely question types, what to memorize, and last-minute strategies.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Vocabulary Builder')"><span class="activity-icon">🔤</span><div class="activity-name">Vocabulary Builder</div><div class="activity-tooltip">10 key terms with definitions, context sentences, and a memory trick for each.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Compare & Contrast')"><span class="activity-icon">⚖️</span><div class="activity-name">Compare & Contrast</div><div class="activity-tooltip">Side-by-side comparison of two concepts, events, or ideas — ideal for essays and critical thinking.</div></button>
+      <button class="activity-btn" onclick="selectActivity(this,'Debate Both Sides')"><span class="activity-icon">🗣️</span><div class="activity-name">Debate Both Sides</div><div class="activity-tooltip">Strong arguments FOR and AGAINST a topic. Builds critical thinking and helps with persuasive writing.</div></button>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(3)">← Back</button>
+      <button class="btn-generate" id="btnGenerate" onclick="goStep(5)" disabled>⚡ Generate Prompt</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="card hidden" id="step5">
+    <div class="card-title">Step 5 — Your Study Prompt</div>
+    <div class="card-subtitle">Paste this into ChatGPT, Claude, Gemini, or any AI chatbot — start a <strong>new chat</strong> for best results.</div>
+    <div class="summary-chips" id="summaryChips"></div>
+    <div class="prompt-output-wrap">
+      <div class="prompt-label">Generated Prompt</div>
+      <div class="prompt-box">
+        <div class="prompt-text" id="promptOutput"></div>
+        <div class="copy-row">
+          <span class="copy-notice" id="copyNotice">✓ Copied to clipboard!</span>
+          <button class="btn-copy" onclick="copyPrompt()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="chatbot-tips">
+      <div class="tips-title">💡 Tips for Getting the Best Response</div>
+      <div class="tips-grid">
+        <div class="tip-item"><div class="tip-dot">1</div><span>Always start a <strong>new chat</strong> — don't paste into an ongoing conversation</span></div>
+        <div class="tip-item"><div class="tip-dot">2</div><span>After the response, ask <strong>"Can you give me one more example?"</strong> to go deeper</span></div>
+        <div class="tip-item"><div class="tip-dot">3</div><span>Type <strong>"I don't understand [part]"</strong> and the AI will re-explain just that section</span></div>
+        <div class="tip-item"><div class="tip-dot">4</div><span>Free plans have message limits — save long responses by copying them to your notes</span></div>
+      </div>
+    </div>
+    <div class="history-section" id="historySection" style="display:none;">
+      <div class="history-title">Session History</div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+    <div class="nav-row" style="margin-top:20px;">
+      <button class="btn-back" onclick="goStep(4)">← Change Activity</button>
+      <button class="btn-next" onclick="goStep(1)" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);box-shadow:var(--shadow-gold);">↩ New Prompt</button>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>Kappa League <span>Study Tools</span></h3>
+      <p>The Kappa League is a mentorship and academic development program of Kappa Alpha Psi Fraternity, Inc. — empowering young men through education, leadership, and achievement.</p>
+      <a href="index.html" class="footer-home-link">← Back to Home Page</a>
+    </div>
+    <div class="footer-links">
+      <div class="footer-links-title">Supported Chatbots</div>
+      <a class="footer-link" href="https://chat.openai.com" target="_blank">→ ChatGPT (OpenAI)</a>
+      <a class="footer-link" href="https://claude.ai" target="_blank">→ Claude (Anthropic)</a>
+      <a class="footer-link" href="https://gemini.google.com" target="_blank">→ Gemini (Google)</a>
+      <a class="footer-link" href="https://copilot.microsoft.com" target="_blank">→ Copilot (Microsoft)</a>
+    </div>
+    <div class="footer-links">
+      <div class="footer-links-title">How to Use</div>
+      <button class="footer-link-btn" onclick="openPopup('hiw')">→ How It Works</button>
+      <button class="footer-link-btn" onclick="openPopup('grade')">→ Pick your grade &amp; level</button>
+      <button class="footer-link-btn" onclick="openPopup('subject')">→ Choose subject &amp; topic</button>
+      <button class="footer-link-btn" onclick="openPopup('activity')">→ Select a learning activity</button>
+      <button class="footer-link-btn" onclick="openPopup('copy')">→ Copy &amp; paste your prompt</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Kappa League Academic Tools · Built for students in grades 6–12</p>
+    <div class="version-badge">v2.0</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closePopupOutside(event)">
+  <div class="modal-box" id="modalBox">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div class="modal-badge" id="modalBadge"></div>
+    <div class="modal-icon" id="modalIcon"></div>
+    <h2 class="modal-title" id="modalTitle"></h2>
+    <p class="modal-desc" id="modalDesc"></p>
+    <div class="modal-steps" id="modalSteps"></div>
+    <div class="modal-tip" id="modalTip"></div>
+    <button class="modal-cta" onclick="closeModal()">Got it — let's go! →</button>
+  </div>
+</div>
+
+<script>
+const state = { grade:'', level:'', levelNote:'', subject:'', topic:'', activity:'', context:'', currentStep:1 };
+const promptHistory = [];
+
+/* ── DATA ── */
+const subjectTips = {
+  'Math':'💡 <strong>Pro Tip:</strong> Ask the AI to show you each step one at a time. If a step is confusing, type "explain step 2 again more simply."',
+  'Science':'💡 <strong>Pro Tip:</strong> Ask the AI to compare a biology concept to something in everyday life — it makes memorizing much easier.',
+  'ELA':'💡 <strong>Pro Tip:</strong> For writing help, paste in your draft and ask "What\'s the weakest part of this paragraph?"',
+  'Social Studies':'💡 <strong>Pro Tip:</strong> Ask the AI to connect historical events to things happening in the world today.',
+  'History':'💡 <strong>Pro Tip:</strong> Ask "Why does this event matter today?" after any history explanation to go deeper.',
+  'Business':'💡 <strong>Pro Tip:</strong> Ask the AI to give you a real business example (like Nike or Apple) to illustrate every concept.',
+  'Python':'💡 <strong>Pro Tip:</strong> Always ask the AI to show you code AND explain every line. Then ask it to change one thing so you see how it works.',
+  'Web Development':'💡 <strong>Pro Tip:</strong> Ask the AI to give you code you can copy into CodePen (codepen.io) to see it live in your browser.',
+  'Accounting':'💡 <strong>Pro Tip:</strong> Ask the AI to walk you through a transaction with real numbers — abstract accounting concepts click faster with examples.',
+  'Finance':'💡 <strong>Pro Tip:</strong> Ask "How does this affect me personally right now?" — the AI can connect finance topics to your everyday life.',
+  'Music Production':'💡 <strong>Pro Tip:</strong> Ask the AI to write you a sample AI music prompt you can drop into Suno, Udio, or another music AI tool.',
+  'Video Production':'💡 <strong>Pro Tip:</strong> Ask the AI to write a shot list or script outline for a video on a topic you care about — then actually film it.'
+};
+
+const topics = {
+  'Math':['Fractions & Decimals','Ratios & Proportions','Integers & Number Lines','Algebra: Variables & Expressions','Linear Equations','Inequalities','Functions & Graphs','Geometry: Area & Perimeter','The Pythagorean Theorem','Statistics & Probability','Systems of Equations','Quadratic Equations','Exponents & Radicals','Polynomials','Trigonometry Basics','Pre-Calculus'],
+  'Science':['Scientific Method','Cell Biology','Ecosystems & Food Webs','Genetics & Heredity','Human Body Systems','Photosynthesis & Respiration','Forces & Motion (Newton\'s Laws)','Energy: Kinetic & Potential','Waves & Sound','Electricity & Circuits','Chemical Reactions','Periodic Table & Elements','States of Matter','Earth\'s Layers & Plate Tectonics','Weather & Climate','Astronomy & Space'],
+  'ELA':['Reading Comprehension Strategies','Main Idea & Supporting Details','Figurative Language','Grammar: Parts of Speech','Sentence Structure','Paragraph Writing','Argumentative Essays','Narrative Writing','Expository Writing','Point of View & Perspective','Theme & Central Idea','Literary Devices','Vocabulary in Context','Research & Citing Sources','Poetry Analysis','Comparing Texts'],
+  'Social Studies':['Map Skills & Geography','Government & Civics','The U.S. Constitution','Branches of Government','Economic Systems','Supply & Demand','Migration & Immigration','Cultural Diversity','Human Rights','Global Issues','Environmental Sustainability','Media Literacy','Citizenship & Community','Trade & Globalization','Political Systems','Current Events Analysis'],
+  'History':['Ancient Civilizations (Egypt, Greece, Rome)','The Middle Ages','The Renaissance & Reformation','Age of Exploration','The American Revolution','The U.S. Constitution & Founding Era','The Civil War','Reconstruction Era','The Industrial Revolution','World War I','The Great Depression','World War II','The Civil Rights Movement','The Cold War','The Vietnam War Era','Modern U.S. History (1990s–Present)'],
+  'Business':['Entrepreneurship Basics','Business Plans','Supply & Demand','Marketing Fundamentals','Branding & Advertising','Customer Service','Business Ethics','Leadership & Management','Budgeting for Businesses','E-commerce Basics','Small Business Operations','Networking & Professional Skills','Social Media for Business','Profit, Loss & Break-Even','Business Law Basics','Starting a Side Hustle'],
+  'Python':['Variables & Data Types','Input & Output','Conditional Statements (if/else)','For Loops & While Loops','Functions','Lists & Tuples','Dictionaries','String Methods','File Reading & Writing','Error Handling (try/except)','Object-Oriented Programming (Classes)','Modules & Libraries','Working with APIs','Data with Pandas (Intro)','Web Scraping Basics','Building a Simple Project'],
+  'Web Development':['HTML Basics & Structure','HTML Forms & Tables','CSS Selectors & Styling','CSS Flexbox','CSS Grid','Responsive Design & Media Queries','JavaScript Variables & Functions','JavaScript DOM Manipulation','JavaScript Events','Arrays & Loops in JavaScript','Fetch API & JSON','Intro to React','React Components & Props','React State & Hooks','Git & Version Control','Deploying a Website'],
+  'Accounting':['Accounting Equation (Assets = Liabilities + Equity)','Debits & Credits','Chart of Accounts','Journal Entries','T-Accounts & Ledgers','Trial Balance','Income Statement','Balance Sheet','Cash Flow Statement','Accounts Payable & Receivable','Payroll Basics','Depreciation','Inventory Methods (FIFO/LIFO)','Bank Reconciliation','Budgeting & Forecasting','Tax Basics'],
+  'Finance':['Needs vs. Wants','Budgeting & Saving','Checking & Savings Accounts','Credit Scores & Reports','Interest (Simple vs. Compound)','Debt & Loans','Investing Basics','Stocks & Bonds','Mutual Funds & ETFs','Retirement Accounts (401k/IRA)','Insurance Basics','Taxes & W-2 Forms','Building Wealth Over Time','The Stock Market','Cryptocurrency Basics','Financial Goal Setting'],
+  'Music Production':['What is a DAW (Digital Audio Workstation)?','Beat Making Basics','Drums & Rhythm Programming','Melody & Chord Progressions','Sampling & Looping','Layering Sounds & Instruments','Mixing: Volume & Panning','EQ (Equalization) Basics','Compression & Dynamics','Reverb & Delay Effects','Song Structure (Intro/Verse/Chorus/Bridge)','Lyrics Writing','Recording Vocals','Mastering for Streaming','Music Prompt Writing for AI Tools','Publishing & Copyright Basics'],
+  'Video Production':['Types of Camera Shots & Angles','The Rule of Thirds','Lighting Basics (3-Point Lighting)','Audio & Microphone Types','Pre-Production: Storyboarding','Writing a Video Script','Directing Basics','Video Editing Fundamentals','Transitions & Effects','Color Grading Basics','YouTube/Social Media Video Optimization','Thumbnail & Title Design','Short-Form Video (Reels/TikTok)','Voiceover & Narration','Prompt Writing for AI Video Tools','Building a Video Portfolio']
+};
+
+const activityInstructions = {
+  'Explain It':(g,t,l)=>`Explain "${t}" clearly in exactly 3 parts:\n1. A 2–3 sentence overview using ${l==='Struggling'?'very simple':'grade-appropriate'} language\n2. Up to 5 key terms defined in one sentence each\n3. One analogy or real-world comparison a ${g} student would immediately relate to\nKeep your total response under 300 words.`,
+  'Quiz Me':(g,t,l)=>`Create a 5-question quiz on "${t}" for a ${g} student (${l} level).\n- Questions 1–3: Multiple choice (4 options, label A/B/C/D)\n- Questions 4–5: Short answer\nList all 5 questions first, then provide a labeled Answer Key.\nTotal response under 350 words.`,
+  'Study Guide':(g,t,l)=>`Build a study guide for "${t}" (${g}, ${l} level) using this exact format:\n• OVERVIEW: 2–3 sentence summary\n• KEY CONCEPTS: 5 bullet points, one line each\n• VOCABULARY: 3 terms with definitions\n• REMEMBER THIS: 2 test-taking or memory tips\nTotal under 300 words. No extra sections.`,
+  'Real-World Examples':(g,t,l)=>`Give exactly 3 real-world examples of "${t}" that a ${g} student would find relevant.\nFor each: Name it → Explain it in 2 sentences → Say why it matters in 1 sentence.\n${l==='Struggling'?'Use everyday simple language.':l==='Advanced'?'Include some technical depth.':''}\nTotal under 280 words.`,
+  'Practice Problems':(g,t,l)=>`Give 3 practice problems on "${t}" for a ${g} student (${l} level).\nNumber each problem clearly.\nAfter all 3 problems, show step-by-step solutions labeled Solution 1, 2, 3.\n${l==='Struggling'?'Make problems straightforward with extra explanation in solutions.':l==='Advanced'?'Include one challenging multi-step problem.':''}\nTotal under 380 words.`,
+  'Flashcard Set':(g,t,l)=>`Create 8 flashcard pairs for "${t}" (${g}, ${l} level).\nFormat each as:\nQ: [question]\nA: [concise answer]\nStart with basic recall questions and increase to application-level by card 7–8.\nTotal under 300 words.`,
+  'Common Mistakes':(g,t,l)=>`List the 5 most common mistakes ${g} students (${l} level) make with "${t}".\nFor each: Name the mistake → 1 sentence on why students make it → 1 sentence quick fix.\nBe specific and practical.\nTotal under 280 words.`,
+  'Mini Project':(g,t,l)=>`Design one hands-on mini project for a ${g} student (${l} level) to practice "${t}".\nInclude: Project Name | Goal (1 sentence) | Tools/Materials needed | Steps (max 5) | What they will have learned.\nTotal under 300 words.`,
+  'Summarize For Me':(g,t,l)=>`Write a clear, organized summary of "${t}" for a ${g} student (${l} level).\nStructure it as:\n• The Big Idea (2 sentences)\n• 4–5 most important points (bullets, one line each)\n• One sentence on why this topic matters\n${l==='Struggling'?'Use simple everyday language.':l==='Advanced'?'Use precise academic language.':''}\nTotal under 260 words.`,
+  'Help Me Write':(g,t,l)=>`Act as a writing coach for a ${g} student (${l} level) writing about "${t}".\nProvide:\n1. A strong opening sentence they can use or adapt\n2. 3 main points they should cover (one line each)\n3. One transition phrase to connect ideas\n4. A closing sentence strategy\nDo NOT write the full essay — guide them to write it themselves.\nTotal under 280 words.`,
+  'Exam Review':(g,t,l)=>`Create a test-prep review for "${t}" for a ${g} student (${l} level).\nInclude:\n• 3 most likely question types on a test\n• 4 facts/formulas/dates to memorize (bullets)\n• 2 common traps to avoid\n• 1 last-minute study tip\nTotal under 300 words.`,
+  'Vocabulary Builder':(g,t,l)=>`Build a vocabulary list for "${t}" (${g}, ${l} level) with exactly 10 terms.\nFor each term provide:\nTerm → Definition (1 sentence) → Example sentence → Memory trick (1 sentence)\nFormat cleanly and consistently.\nTotal under 380 words.`,
+  'Compare & Contrast':(g,t,l)=>`Compare and contrast two key concepts within "${t}" for a ${g} student (${l} level).\nChoose the two most important ideas to compare.\nStructure:\n• Similarities (3 bullets)\n• Differences (3 bullets)\n• When to use or think about each one\nTotal under 280 words.`,
+  'Debate Both Sides':(g,t,l)=>`Present both sides of a key debate or controversy within "${t}" for a ${g} student (${l} level).\nFormat:\nSIDE A (For/Pro): 3 strong arguments\nSIDE B (Against/Con): 3 strong arguments\nThen 1 sentence on what a student should consider when forming their own view.\nTotal under 300 words.`
+};
+
+/* ── POPUP DATA ── */
+const popupData = {
+  hiw: {
+    badge:'How It Works',icon:'⚡',
+    title:'How the Prompt Generator Works',
+    desc:'Five simple steps — under 60 seconds — to a fully custom AI tutor prompt built around exactly how you learn.',
+    steps:[
+      {text:'<strong>Step 1 — Grade:</strong> Pick 6th through 12th. Sets the language level and example complexity throughout your prompt.'},
+      {text:'<strong>Step 2 — Subject & Skill Level:</strong> Choose from 12 subjects. Once selected, pick Struggling 🌱, On Level 📘, or Advanced 🚀 for that specific subject.'},
+      {text:'<strong>Step 3 — Topic:</strong> Select from 16 specific topics per subject. Add optional context like your chapter number or test date for an even sharper prompt.'},
+      {text:'<strong>Step 4 — Activity:</strong> Tell the AI HOW to help — Explain It, Quiz Me, Study Guide, Exam Review, Flashcard Set, and 9 more options.'},
+      {text:'<strong>Step 5 — Copy & Go:</strong> Your custom prompt is generated instantly. One tap copies it — paste into any free AI chatbot and start learning.'}
+    ],
+    tip:'💡 <strong>Pro Tip:</strong> Generate multiple prompts in one session — your history saves your last 5 prompts so you can reload any of them instantly.'
+  },
+  grade: {
+    badge:'Step 1 of 4',icon:'🎓',
+    title:'Pick Your Grade & Skill Level',
+    desc:'Every prompt is built around YOU — your grade and how comfortable you are with the subject. This makes sure the AI explains things in the right way, at the right depth.',
+    steps:[
+      {text:'<strong>Choose your grade</strong> — 6th through 12th. This sets the language complexity and examples used in your prompt.'},
+      {text:'<strong>Select a subject</strong> on the next screen, then your skill level for <em>that specific subject</em> appears below.'},
+      {text:'<strong>Pick your level:</strong> 🌱 Struggling (simple language & extra support), 📘 On Level (standard pace), or 🚀 Advanced (deeper challenge).'},
+      {text:'You can be advanced in one subject and struggling in another — the tool handles each separately.'}
+    ],
+    tip:'💡 <strong>Pro Tip:</strong> Be honest about your level. A "Struggling" prompt gives simpler explanations that build your foundation faster than jumping to Advanced.'
+  },
+  subject: {
+    badge:'Step 2 of 4',icon:'📚',
+    title:'Choose Your Subject & Topic',
+    desc:'With 12 subjects and 16 topics each, you can get a custom prompt for nearly anything on your syllabus — from Pythagorean Theorem to Beat Making to Stocks & Bonds.',
+    steps:[
+      {text:'<strong>Pick a subject</strong> — Math, Science, ELA, History, Social Studies, Business, Python, Web Development, Accounting, Finance, Music Prompting, or Video Prompting.'},
+      {text:'<strong>Select a specific topic</strong> — 16 options per subject covering everything from basics to advanced concepts. Your selection is saved if you go back.'},
+      {text:'<strong>Add optional context</strong> — tell the AI what chapter you\'re on, what your teacher emphasized, or that you have a test Friday.'},
+      {text:'A subject-specific <strong>Pro Tip</strong> appears at the top of the topic screen to help you get more out of the AI for that subject.'}
+    ],
+    tip:'💡 <strong>Pro Tip:</strong> Use the context box! "We just finished Chapter 6 and my teacher focuses on word problems" produces a far more targeted prompt than leaving it blank.'
+  },
+  activity: {
+    badge:'Step 3 of 4',icon:'⚡',
+    title:'Select a Learning Activity',
+    desc:'This is where you tell the AI tutor exactly HOW to help you. Each activity produces a differently structured prompt — choose based on what you need right now.',
+    steps:[
+      {text:'<strong>Hover over any activity</strong> to see a tooltip explaining exactly what it produces before you select it.'},
+      {text:'<strong>14 activities:</strong> Explain It, Quiz Me, Study Guide, Practice Problems, Flashcard Set, Real-World Examples, Common Mistakes, Mini Project, Summarize For Me, Help Me Write, Exam Review, Vocabulary Builder, Compare & Contrast, Debate Both Sides.'},
+      {text:'<strong>Match to your goal:</strong> Studying tonight? → Study Guide. Test tomorrow? → Exam Review. Confused? → Explain It. Need to practice? → Practice Problems.'},
+      {text:'Each activity has a <strong>built-in word limit</strong> so your response stays focused and doesn\'t eat up your free-plan tokens.'}
+    ],
+    tip:'💡 <strong>Pro Tip:</strong> Try "Explain It" first to learn the concept, then "Quiz Me" to test yourself. Your session history saves your last 5 prompts.'
+  },
+  copy: {
+    badge:'Step 4 of 4',icon:'📋',
+    title:'Copy & Paste Your Prompt',
+    desc:'Your prompt is ready — now take it to your preferred AI chatbot. All of these are free: ChatGPT, Claude, Gemini, and Microsoft Copilot.',
+    steps:[
+      {text:'Click the <strong>gold "Copy Prompt" button</strong> — the full prompt is copied to your clipboard instantly with one tap.'},
+      {text:'<strong>Open a NEW chat</strong> in your AI chatbot of choice. Don\'t paste into an existing conversation — a fresh chat gets better results.'},
+      {text:'<strong>Paste and send.</strong> The AI will respond as a tutor tailored to your grade, level, subject, topic, and activity.'},
+      {text:'<strong>Follow up naturally:</strong> Type "explain that part again," "give me another example," or "make it simpler" to go deeper.'}
+    ],
+    tip:'💡 <strong>Free Plan Tip:</strong> ChatGPT, Claude, and Gemini all have free tiers. Save long responses by copying them into your notes app — free plans have daily message limits.'
+  }
+};
+
+/* ── STEP FUNCTIONS ── */
+function selectGrade(btn,grade){document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.grade=grade;document.getElementById('next1').disabled=false;}
+function selectLevel(btn,level,note){document.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.level=level;state.levelNote=note;document.getElementById('next2').disabled=false;}
+function selectSubject(btn,subject){
+  document.querySelectorAll('.subject-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');state.subject=subject;state.level='';state.levelNote='';
+  document.querySelectorAll('.level-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('next2').disabled=true;
+  document.getElementById('levelSubjectName').textContent=subject;
+  const ls=document.getElementById('levelSection');
+  ls.classList.remove('hidden');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>ls.classList.add('visible')));
+  setTimeout(()=>ls.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
+}
+function selectTopic(card,topic){document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');state.topic=topic;document.getElementById('next3').disabled=false;}
+function selectActivity(btn,name){document.querySelectorAll('.activity-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.activity=name;document.getElementById('btnGenerate').disabled=false;}
+
+function goStep(n){
+  if(n===2&&!state.grade)return;
+  if(n===3&&(!state.subject||!state.level))return;
+  if(n===4&&!state.topic)return;
+  if(n===5&&!state.activity)return;
+  [1,2,3,4,5].forEach(i=>{document.getElementById('step'+i).classList.add('hidden');const s=document.getElementById('s'+i);s.classList.remove('active','done');});
+  for(let i=1;i<n;i++)document.getElementById('s'+i).classList.add('done');
+  document.getElementById('s'+n).classList.add('active');
+  document.getElementById('step'+n).classList.remove('hidden');
+  state.currentStep=n;
+  if(n===3)populateTopics();
+  if(n===5)buildPrompt();
+  if(n===2&&state.subject){document.getElementById('levelSubjectName').textContent=state.subject;const ls=document.getElementById('levelSection');ls.classList.remove('hidden');requestAnimationFrame(()=>requestAnimationFrame(()=>ls.classList.add('visible')));}
+  updateProgress(n);updateRibbon(n);window.scrollTo({top:0,behavior:'smooth'});
+}
+function jumpStep(n){if(document.getElementById('s'+n).classList.contains('done'))goStep(n);}
+function updateProgress(n){document.getElementById('progressBar').style.width=((n-1)/4*100)+'%';}
+function updateRibbon(n){
+  const ribbon=document.getElementById('ribbon'),inner=document.getElementById('ribbonInner');
+  if(n<=1){ribbon.classList.remove('visible');return;}
+  ribbon.classList.add('visible');
+  let html='<span class="ribbon-label">Your selections:</span>';
+  if(state.grade)html+=`<span class="ribbon-chip rc" onclick="goStep(1)"><span class="rc-dot"></span>${state.grade} · ${state.level}</span>`;
+  if(state.subject&&n>2)html+=`<span class="ribbon-chip rc" onclick="goStep(2)"><span class="rc-dot"></span>${state.subject}</span>`;
+  if(state.topic&&n>3)html+=`<span class="ribbon-chip rc" onclick="goStep(3)"><span class="rc-dot"></span>${state.topic}</span>`;
+  if(state.activity&&n>4)html+=`<span class="ribbon-chip rc" onclick="goStep(4)"><span class="rc-dot"></span>${state.activity}</span>`;
+  inner.innerHTML=html;
+}
+function populateTopics(){
+  const tip=document.getElementById('subjectTip');
+  tip.innerHTML=subjectTips[state.subject]||'';
+  tip.className='subject-tip'+(subjectTips[state.subject]?' show':'');
+  const grid=document.getElementById('topicGrid');grid.innerHTML='';
+  (topics[state.subject]||[]).forEach(t=>{const card=document.createElement('button');card.className='topic-card'+(state.topic===t?' selected':'');card.textContent=t;card.onclick=()=>selectTopic(card,t);grid.appendChild(card);});
+  document.getElementById('contextInput').value=state.context;
+  document.getElementById('contextInput').oninput=(e)=>{state.context=e.target.value;};
+  document.getElementById('next3').disabled=!state.topic;
+}
+function buildPrompt(){
+  const{grade,level,levelNote,subject,topic,activity,context}=state;
+  const schoolLevel=parseInt(grade)>=9?'high school':'middle school';
+  const fn=activityInstructions[activity];
+  const taskBlock=fn?fn(grade,topic,level):`Help me with "${topic}" — ${activity}`;
+  const contextBlock=context&&context.trim()?`\nAdditional context from student: ${context.trim()}`:'';
+  const prompt=`You are an expert, encouraging tutor for a ${grade} ${schoolLevel} student.\nSkill level: ${level} — ${levelNote}\n\nSubject: ${subject}\nTopic: ${topic}\nTask: ${activity}\n${contextBlock}\n${taskBlock}\n\nCore rules:\n• Stay focused only on the topic above — no tangents\n• Match language complexity to the ${level} level\n• Be warm, direct, and motivating — never condescending\n• Use clean formatting with clear labels\n• Do not add unrequested sections`;
+  document.getElementById('promptOutput').textContent=prompt;
+  const lc={Struggling:'chip-green','On Level':'chip-outline',Advanced:'chip-gold'};
+  document.getElementById('summaryChips').innerHTML=`<span class="chip chip-crimson">${grade}</span><span class="chip ${lc[level]||'chip-outline'}">${level}</span><span class="chip chip-gold">${subject}</span><span class="chip chip-outline">${topic}</span><span class="chip chip-outline">${activity}</span>`+(context?`<span class="chip chip-green">+ Context Added</span>`:'');
+  saveHistory(grade,subject,topic,activity,prompt);
+}
+function saveHistory(grade,subject,topic,activity,prompt){
+  promptHistory.unshift({grade,subject,topic,activity,prompt,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  if(promptHistory.length>5)promptHistory.pop();renderHistory();
+}
+function renderHistory(){
+  const section=document.getElementById('historySection'),list=document.getElementById('historyList');
+  if(promptHistory.length<2){section.style.display='none';return;}
+  section.style.display='block';
+  list.innerHTML=promptHistory.slice(1).map((h,i)=>`<div class="history-item" onclick="loadHistory(${i+1})"><div class="history-meta"><span>${h.subject}</span> · ${h.topic} · ${h.activity}<br>${h.grade} · ${h.time}</div><div class="history-reuse">↩ Reload</div></div>`).join('');
+}
+function loadHistory(idx){
+  const h=promptHistory[idx];
+  document.getElementById('promptOutput').textContent=h.prompt;
+  document.getElementById('summaryChips').innerHTML=`<span class="chip chip-crimson">${h.grade}</span><span class="chip chip-gold">${h.subject}</span><span class="chip chip-outline">${h.topic}</span><span class="chip chip-outline">${h.activity}</span><span class="chip chip-outline" style="background:#f0e8d8;">History</span>`;
+}
+
+/* ── COPY ── */
+function copyPrompt(){
+  const text=document.getElementById('promptOutput').textContent;
+  const notice=document.getElementById('copyNotice');
+  const btn=document.querySelector('.btn-copy');
+  function showSuccess(){
+    notice.classList.add('show');
+    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    btn.style.background='var(--gold)';btn.style.color='var(--crimson-dark)';
+    setTimeout(()=>{notice.classList.remove('show');btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Prompt`;btn.style.background='';btn.style.color='';},2500);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(showSuccess).catch(()=>fallbackCopy(text,showSuccess));}
+  else{fallbackCopy(text,showSuccess);}
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');
+  ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');cb();}catch(e){alert('Please manually select the prompt text and press Ctrl+C (or Cmd+C on Mac).');}
+  document.body.removeChild(ta);
+}
+
+/* ── POPUPS ── */
+function openPopup(key){
+  const d=popupData[key];if(!d)return;
+  document.getElementById('modalBadge').textContent=d.badge;
+  document.getElementById('modalIcon').textContent=d.icon;
+  document.getElementById('modalTitle').textContent=d.title;
+  document.getElementById('modalDesc').textContent=d.desc;
+  document.getElementById('modalTip').innerHTML=d.tip;
+  document.getElementById('modalSteps').innerHTML=d.steps.map((s,i)=>`<div class="modal-step"><div class="modal-step-num">${i+1}</div><div class="modal-step-text">${s.text}</div></div>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function closePopupOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+</script>
+</body>
+</html>
