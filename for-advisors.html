@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>For Advisors & Mentors — Kappa League Study Tools</title>
+<meta name="description" content="A guide for Kappa League chapter advisors and mentors on how to use the AI Study Prompt Generator with Kappans in study hall, tutoring sessions, and chapter meetings."/>
+<meta property="og:title" content="For Kappa League Advisors — AI Study Tool Guide"/>
+<meta property="og:description" content="Run a productive study hall in under 5 minutes. Step-by-step guide for chapter advisors using the Kappa League AI Study Prompt Generator."/>
+<meta property="og:url" content="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/for-advisors.html"/>
+<meta property="og:type" content="website"/>
+<link rel="canonical" href="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/for-advisors.html"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2370110C'/><text x='50' y='70' font-family='Arial,sans-serif' font-size='46' font-weight='900' text-anchor='middle' fill='%23FFD700'>KL</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<!-- Google Analytics 4 · Measurement ID: G-BW9X842TE7 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BW9X842TE7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BW9X842TE7');</script>
+<style>
+:root{
+  --crimson:#70110C;--crimson-dark:#4d0000;--crimson-deeper:#2a0000;
+  --gold:#FFD700;--gold-light:#FFE84D;--gold-dark:#CCB000;--gold-pale:#fffde6;
+  --white:#ffffff;--off-white:#fdfaf4;
+  --gray-text:#3a2a20;--gray-mid:#c8bfb0;--gray-light:#f0e8de;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--off-white);color:var(--gray-text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{background:#2a0000;padding:0 24px;border-bottom:1px solid rgba(255,215,0,0.15);}
+.nav-inner{max-width:1100px;margin:0 auto;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-size:0.95rem;font-weight:900;color:#fff;letter-spacing:-0.3px;text-decoration:none;}
+.nav-logo span{color:var(--gold-light);}
+.nav-links{display:flex;gap:20px;align-items:center;}
+.nav-link{font-size:0.76rem;font-weight:700;color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s;}
+.nav-link:hover{color:var(--gold-light);}
+.nav-cta{padding:8px 20px;border-radius:30px;background:var(--gold);color:var(--crimson-dark);font-size:0.76rem;font-weight:800;text-decoration:none;transition:all 0.2s;}
+.nav-cta:hover{background:var(--gold-light);}
+
+/* ── HERO ── */
+.hero{background:#70110C;padding:72px 24px 64px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,215,0,0.15) 0%,transparent 70%);}
+.hero::after{content:'';position:absolute;bottom:-60px;left:5%;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.3);border-radius:30px;padding:5px 16px;margin-bottom:20px;}
+.hero-eyebrow span{font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold-light);}
+.hero h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;color:#fff;line-height:1.1;letter-spacing:-0.8px;margin-bottom:18px;}
+.hero h1 em{font-style:normal;color:var(--gold-light);}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,0.78);font-weight:500;line-height:1.7;max-width:600px;margin-bottom:32px;}
+.hero-sub strong{color:var(--gold-light);}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:40px;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:900;text-decoration:none;border:none;cursor:pointer;transition:all 0.25s;box-shadow:0 6px 24px rgba(255,215,0,0.4);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,215,0,0.55);}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.28);color:#fff;font-family:'Montserrat',sans-serif;font-size:0.84rem;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.btn-outline:hover{background:rgba(255,255,255,0.18);}
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap;}
+.hstat{border-left:2px solid rgba(255,215,0,0.35);padding-left:12px;}
+.hstat-num{font-size:1.5rem;font-weight:900;color:var(--gold-light);line-height:1;}
+.hstat-label{font-size:0.68rem;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+/* ── SECTIONS ── */
+.section{padding:80px 24px;}
+.section-inner{max-width:1000px;margin:0 auto;}
+.eyebrow{font-size:0.7rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--crimson);margin-bottom:10px;}
+.section-title{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:900;color:var(--crimson-dark);line-height:1.15;letter-spacing:-0.4px;margin-bottom:12px;}
+.section-title span{color:var(--gold-dark);}
+.section-sub{font-size:0.88rem;color:var(--gray-text);font-weight:500;line-height:1.7;max-width:600px;margin-bottom:48px;}
+
+/* ── QUICKSTART ── */
+.quickstart-bg{background:#fff;}
+.qs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;}
+.qs-card{background:var(--off-white);border-radius:16px;padding:28px 22px;border:1px solid rgba(112,17,12,0.08);position:relative;}
+.qs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:16px 16px 0 0;background:linear-gradient(90deg,var(--crimson),var(--gold));}
+.qs-num{font-size:3rem;font-weight:900;color:var(--gray-light);line-height:1;letter-spacing:-2px;margin-bottom:8px;}
+.qs-icon{font-size:1.8rem;margin-bottom:8px;}
+.qs-title{font-size:0.9rem;font-weight:800;color:var(--crimson-dark);margin-bottom:6px;}
+.qs-desc{font-size:0.79rem;color:var(--gray-text);line-height:1.65;font-weight:500;}
+
+/* ── WORKFLOWS ── */
+.workflows-bg{background:var(--off-white);}
+.wf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;}
+.wf-card{background:#fff;border-radius:16px;padding:28px 24px;box-shadow:0 2px 14px rgba(112,17,12,0.07);border:1px solid rgba(112,17,12,0.07);}
+.wf-tag{display:inline-block;font-size:0.65rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:10px;margin-bottom:14px;}
+.wf-tag-red{background:rgba(112,17,12,0.1);color:var(--crimson);}
+.wf-tag-gold{background:rgba(255,215,0,0.2);color:#7a6000;}
+.wf-tag-green{background:#e6f9f0;color:#1a7a4a;}
+.wf-scenario{font-size:1.05rem;font-weight:800;color:var(--crimson-dark);margin-bottom:6px;}
+.wf-subtitle{font-size:0.76rem;font-weight:700;color:var(--gray-mid);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px;}
+.wf-steps{display:flex;flex-direction:column;gap:8px;}
+.wf-step{display:flex;gap:10px;align-items:flex-start;font-size:0.78rem;font-weight:600;color:var(--gray-text);line-height:1.5;}
+.wf-step-dot{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;font-size:0.62rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.wf-result{margin-top:14px;padding:10px 13px;background:var(--gold-pale);border-radius:8px;border-left:3px solid var(--gold-dark);font-size:0.76rem;font-weight:700;color:#7a6000;line-height:1.5;}
+
+/* ── QR CODE ── */
+.qr-bg{background:#70110C;padding:72px 24px;}
+.qr-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.qr-copy .eyebrow{color:var(--gold-light);}
+.qr-copy .section-title{color:#fff;}
+.qr-copy .section-title span{color:var(--gold-light);}
+.qr-copy p{font-size:0.88rem;color:rgba(255,255,255,0.72);font-weight:500;line-height:1.7;margin-bottom:24px;}
+.qr-visual{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.qr-frame{background:#fff;border-radius:16px;padding:20px;box-shadow:0 12px 40px rgba(0,0,0,0.3);}
+.qr-frame img{display:block;border-radius:8px;}
+.qr-url{font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.5);text-align:center;word-break:break-all;max-width:220px;}
+.btn-print{display:inline-flex;align-items:center;gap:7px;padding:10px 22px;border-radius:30px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.28);color:#fff;font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-print:hover{background:rgba(255,255,255,0.22);}
+
+/* ── TIPS ── */
+.tips-bg{background:#fff;}
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:40px;}
+.tip-card{background:var(--off-white);border-radius:14px;padding:22px 18px;}
+.tip-icon{font-size:1.6rem;margin-bottom:10px;}
+.tip-title{font-size:0.83rem;font-weight:800;color:var(--crimson-dark);margin-bottom:6px;}
+.tip-desc{font-size:0.76rem;color:var(--gray-text);line-height:1.6;font-weight:500;}
+
+/* ── ACTIVITY GUIDE ── */
+.act-bg{background:var(--off-white);}
+.act-table{width:100%;border-collapse:collapse;margin-top:36px;}
+.act-table th{text-align:left;font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-mid);padding:8px 14px;border-bottom:2px solid var(--gray-light);}
+.act-table td{padding:12px 14px;border-bottom:1px solid var(--gray-light);font-size:0.79rem;font-weight:600;vertical-align:top;}
+.act-table tr:last-child td{border-bottom:none;}
+.act-table tr:hover td{background:rgba(112,17,12,0.03);}
+.act-name{color:var(--crimson-dark);font-weight:800;}
+.act-badge{display:inline-block;font-size:0.62rem;font-weight:800;padding:2px 8px;border-radius:8px;background:rgba(112,17,12,0.08);color:var(--crimson);text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ── CTA ── */
+.cta-bg{background:#70110C;text-align:center;padding:72px 24px;position:relative;overflow:hidden;}
+.cta-bg::before{content:'';position:absolute;top:-80px;right:-80px;width:360px;height:360px;border-radius:50%;background:rgba(255,215,0,0.1);}
+.cta-bg::after{content:'';position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,0.04);}
+.cta-inner{position:relative;z-index:1;max-width:580px;margin:0 auto;}
+.cta-badge{display:inline-block;background:rgba(255,215,0,0.2);border:1px solid rgba(255,215,0,0.35);color:var(--gold-light);font-size:0.68rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:18px;}
+.cta-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:900;color:#fff;line-height:1.12;letter-spacing:-0.5px;margin-bottom:12px;}
+.cta-title span{color:var(--gold-light);}
+.cta-sub{font-size:0.88rem;color:rgba(255,255,255,0.72);font-weight:500;margin-bottom:32px;line-height:1.65;}
+
+/* ── FOOTER ── */
+footer{background:var(--crimson-deeper);padding:40px 24px 24px;}
+.footer-inner{max-width:1000px;margin:0 auto;display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;margin-bottom:28px;}
+.footer-brand h3{font-size:1rem;font-weight:900;color:#fff;margin-bottom:6px;}
+.footer-brand h3 span{color:var(--gold-light);}
+.footer-brand p{font-size:0.74rem;color:rgba(255,255,255,0.5);line-height:1.65;max-width:280px;margin-bottom:8px;}
+.footer-col-title{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:12px;}
+.footer-link{display:block;font-size:0.74rem;font-weight:600;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:8px;transition:color 0.2s;}
+.footer-link:hover{color:var(--gold-light);}
+.footer-bottom{max-width:1000px;margin:0 auto;padding-top:20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-bottom p{font-size:0.68rem;color:rgba(255,255,255,0.3);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:720px){
+  .qr-inner{grid-template-columns:1fr;text-align:center;}
+  .qr-visual{margin-top:32px;}
+  .act-table th:nth-child(3),.act-table td:nth-child(3){display:none;}
+  nav .nav-link{display:none;}
+}
+
+/* ── DARK MODE ── */
+@media(prefers-color-scheme:dark){
+  :root{--off-white:#141414;--gray-text:#e0d4c8;--gray-light:#252525;--gray-mid:#5a4e48;}
+  body{background:#141414;}
+  .quickstart-bg,.tips-bg{background:#191919;}
+  .qs-card,.tip-card{background:#1e1e1e;}
+  .wf-card{background:#1e1e1e;}
+  .workflows-bg,.act-bg{background:#141414;}
+  .act-table td,.act-table th{border-color:#2a2a2a;}
+  .act-table tr:hover td{background:rgba(112,17,12,0.08);}
+}
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">Kappa League <span>Study Tools</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="for-advisors.html" style="color:var(--gold-light);">For Advisors</a>
+      <a class="nav-cta" href="kappa-prompt-generator.html">Launch Tool →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span>Kappa League · Chapter Advisors &amp; Mentors</span></div>
+    <h1>Run a Better Study Hall<br>in <em>Under 5 Minutes.</em></h1>
+    <p class="hero-sub">The Kappa League Study Prompt Generator gives every Kappan a <strong>custom AI tutor</strong> — tailored to their grade, subject, and skill level — before you finish taking attendance. No accounts. No subscriptions. No setup.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="kappa-prompt-generator.html">
+        Open the Generator
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a class="btn-outline" href="#qr">Get the QR Code ↓</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">12</div><div class="hstat-label">Subjects</div></div>
+      <div class="hstat"><div class="hstat-num">14</div><div class="hstat-label">Activities</div></div>
+      <div class="hstat"><div class="hstat-num">6–12</div><div class="hstat-label">Grade Levels</div></div>
+      <div class="hstat"><div class="hstat-num">Free</div><div class="hstat-label">No Account</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICKSTART -->
+<section class="section quickstart-bg" id="quickstart">
+  <div class="section-inner">
+    <div class="eyebrow">Quick Start Guide</div>
+    <h2 class="section-title">Three Steps to a <span>Running Study Hall</span></h2>
+    <p class="section-sub">Works on any phone, tablet, or laptop. Students don't need an account — just a browser and a free AI chatbot.</p>
+    <div class="qs-grid">
+      <div class="qs-card">
+        <div class="qs-num">01</div>
+        <div class="qs-icon">📱</div>
+        <div class="qs-title">Share the Link or QR Code</div>
+        <p class="qs-desc">Project or print the QR code on this page. Every Kappan scans it and the generator opens instantly on their device — no install, no login, no waiting.</p>
+      </div>
+      <div class="qs-card">
+        <div class="qs-num">02</div>
+        <div class="qs-icon">⚡</div>
+        <div class="qs-title">Each Student Builds Their Prompt</div>
+        <p class="qs-desc">In under 60 seconds each student picks their grade, subject, skill level, topic, and what kind of help they need. The tool generates a custom prompt built around them.</p>
+      </div>
+      <div class="qs-card">
+        <div class="qs-num">03</div>
+        <div class="qs-icon">🤖</div>
+        <div class="qs-title">Paste Into Any Free AI Chatbot</div>
+        <p class="qs-desc">Students copy their prompt and paste it into ChatGPT, Claude, Gemini, or Copilot — all free with no account on mobile. They're in a real tutoring session in seconds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOWS -->
+<section class="section workflows-bg" id="workflows">
+  <div class="section-inner">
+    <div class="eyebrow">Study Hall Workflows</div>
+    <h2 class="section-title">Three Situations. <span>Three Playbooks.</span></h2>
+    <p class="section-sub">Pick the workflow that matches what your Kappans need tonight.</p>
+    <div class="wf-grid">
+
+      <div class="wf-card">
+        <div class="wf-tag wf-tag-red">🎯 High Stakes</div>
+        <div class="wf-scenario">Pre-Test Prep Session</div>
+        <div class="wf-subtitle">1–3 days before a major test</div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-dot">1</div><span>Share the QR / link. Each student opens the generator.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">2</div><span>Everyone picks their grade → their subject → the topic on their test.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">3</div><span>Activity: <strong>Exam Review</strong> — returns likely question types, facts to memorize, and traps to avoid.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">4</div><span>Students paste into AI chatbot. Follow-up: "Quiz me on those facts."</span></div>
+        </div>
+        <div class="wf-result">💡 Best activity: Exam Review · Study Guide · Quiz Me</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-tag wf-tag-gold">❓ Confusion</div>
+        <div class="wf-scenario">Concept Confusion Night</div>
+        <div class="wf-subtitle">Student doesn't get something specific</div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-dot">1</div><span>Ask each student: "What's one thing from class this week you don't get?"</span></div>
+          <div class="wf-step"><div class="wf-step-dot">2</div><span>They pick their subject → their exact topic → skill level: <strong>Struggling</strong>.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">3</div><span>Activity: <strong>Explain It</strong> — breaks the concept into overview, key terms, and a real-world analogy.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">4</div><span>After reading: ask the AI "explain step 2 again more simply."</span></div>
+        </div>
+        <div class="wf-result">💡 Best activity: Explain It · Common Mistakes · Real-World Examples</div>
+      </div>
+
+      <div class="wf-card">
+        <div class="wf-tag wf-tag-green">📚 Independent</div>
+        <div class="wf-scenario">Open Independent Study</div>
+        <div class="wf-subtitle">Students choose what they work on</div>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-dot">1</div><span>Share the QR. Students pick their own subject and topic — no direction needed.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">2</div><span>Encourage them to use the <strong>optional context box</strong>: "We just finished Chapter 4 and I have homework on word problems."</span></div>
+          <div class="wf-step"><div class="wf-step-dot">3</div><span>Activity is their call — whatever kind of help they need right now.</span></div>
+          <div class="wf-step"><div class="wf-step-dot">4</div><span>Remind them: session history saves their last 5 prompts. They can try multiple subjects.</span></div>
+        </div>
+        <div class="wf-result">💡 Best activity: anything — this is student-led time</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QR CODE -->
+<section class="qr-bg" id="qr">
+  <div class="qr-inner">
+    <div class="qr-copy">
+      <div class="eyebrow" style="color:var(--gold-light);">For Chapter Meetings</div>
+      <h2 class="section-title" style="color:#fff;margin-bottom:14px;">Print This. <span style="color:var(--gold-light);">Share This.</span></h2>
+      <p>Put this QR code on your next meeting slide deck, print it on a handout, or drop it in your chapter group chat. Anyone who scans it goes straight to the study prompt generator — no link needed.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;">
+        <a class="btn-primary" href="kappa-prompt-generator.html" target="_blank">Open Generator ↗</a>
+        <button class="btn-print" onclick="window.print()">🖨 Print This Page</button>
+      </div>
+    </div>
+    <div class="qr-visual">
+      <div class="qr-frame">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html&color=70110C&bgcolor=ffffff" alt="QR Code — Kappa League Study Prompt Generator" width="200" height="200"/>
+      </div>
+      <div class="qr-url">mdtaylor79.github.io/Kappa-League-AI-Study-Tools</div>
+      <button class="btn-print" onclick="copyQRLink()">📋 Copy Link</button>
+      <span id="qrCopyNotice" style="font-size:0.7rem;color:var(--gold-light);font-weight:700;height:14px;display:block;"></span>
+    </div>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="section tips-bg" id="tips">
+  <div class="section-inner">
+    <div class="eyebrow">Advisor Pro Tips</div>
+    <h2 class="section-title">Get More From <span>Every Session</span></h2>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-icon">🎯</div>
+        <div class="tip-title">Let Students Set Their Own Level</div>
+        <p class="tip-desc">The skill level selector (Struggling / On Level / Advanced) is per-subject. A student who's advanced in History might be struggling in Algebra. Let them be honest — the AI adjusts accordingly.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🔁</div>
+        <div class="tip-title">Use "Try a Different Angle"</div>
+        <p class="tip-desc">The generator has a regenerate button that cycles through four prompt angles: Standard, Analogy-First, Misconception-First, and Step-by-Step. If the first response doesn't click, one tap gets a different approach.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">💾</div>
+        <div class="tip-title">Download Prompts to Keep</div>
+        <p class="tip-desc">Students on free AI plans have daily message limits. Have them click "Download .txt" to save their best prompts — they can reuse them next session without burning through their quota.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📝</div>
+        <div class="tip-title">Use the Context Box</div>
+        <p class="tip-desc">Tell students to describe what their teacher emphasized, what chapter they're on, or when their test is. This optional field sharpens the prompt dramatically — "Chapter 6, focusing on word problems, test Friday" vs nothing.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">🤝</div>
+        <div class="tip-title">Pair Students Up</div>
+        <p class="tip-desc">Have a strong student and a struggling student share a device and build the prompt together. The stronger student explains their choices — teaching a concept reinforces it as much as studying it alone.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-icon">📱</div>
+        <div class="tip-title">Works on Any Device</div>
+        <p class="tip-desc">No app install. Students can use a school Chromebook, a personal phone, a tablet — anything with a browser. ChatGPT, Claude, Gemini, and Copilot all have free mobile apps. No subscriptions needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACTIVITY GUIDE -->
+<section class="section act-bg" id="activities">
+  <div class="section-inner">
+    <div class="eyebrow">Activity Reference</div>
+    <h2 class="section-title">Which Activity to <span>Recommend When</span></h2>
+    <p class="section-sub">Quick reference for advisors — match the student's situation to the right activity.</p>
+    <table class="act-table">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Best For</th>
+          <th>What It Produces</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><div class="act-name">📝 Explain It</div></td><td>First time learning a concept</td><td>Overview, key terms, and a relatable analogy</td></tr>
+        <tr><td><div class="act-name">❓ Quiz Me</div></td><td>Testing knowledge retention</td><td>5-question mixed quiz with full answer key</td></tr>
+        <tr><td><div class="act-name">📋 Study Guide</div></td><td>Review before a test</td><td>Overview, key concepts, vocab, memory tips</td></tr>
+        <tr><td><div class="act-name">🎯 Exam Review</div></td><td>Night before a test</td><td>Likely question types, facts to memorize, traps to avoid</td></tr>
+        <tr><td><div class="act-name">✏️ Practice Problems</div></td><td>Homework help / math-heavy subjects</td><td>3 problems with full step-by-step solutions</td></tr>
+        <tr><td><div class="act-name">🃏 Flashcard Set</div></td><td>Memorization, vocab, terms</td><td>8 Q&amp;A pairs, basic to advanced — copy to Quizlet</td></tr>
+        <tr><td><div class="act-name">🔤 Vocabulary Builder</div></td><td>ELA, History, Science terms</td><td>10 terms with definitions, context sentences, memory tricks</td></tr>
+        <tr><td><div class="act-name">⚠️ Common Mistakes</div></td><td>Student keeps getting it wrong</td><td>Top 5 errors, why they happen, quick fixes</td></tr>
+        <tr><td><div class="act-name">🌟 Real-World Examples</div></td><td>"When will I ever use this?"</td><td>3 relatable real-life applications with why they matter</td></tr>
+        <tr><td><div class="act-name">📌 Summarize For Me</div></td><td>After reading a chapter</td><td>Big idea, 4–5 key points, why it matters</td></tr>
+        <tr><td><div class="act-name">✍️ Help Me Write</div></td><td>Essay / writing assignments</td><td>Opening sentence, 3 main points, transitions, closing — no full essay</td></tr>
+        <tr><td><div class="act-name">⚖️ Compare &amp; Contrast</div></td><td>Essay prep, critical thinking</td><td>Side-by-side comparison with similarities and differences</td></tr>
+        <tr><td><div class="act-name">🗣️ Debate Both Sides</div></td><td>Persuasive writing, civics, ethics</td><td>3 pro arguments + 3 con arguments + how to form own view</td></tr>
+        <tr><td><div class="act-name">🚀 Mini Project</div></td><td>Hands-on learners</td><td>Project name, goal, materials, 5 steps, learning outcome</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- SAMPLE PROMPT -->
+<section class="section quickstart-bg" id="sample-prompt">
+  <div class="section-inner">
+    <div class="eyebrow">See What Students Get</div>
+    <h2 class="section-title">A Real <span>Generated Prompt</span></h2>
+    <p class="section-sub">Here's an actual prompt the tool generates — this is what your student copies and pastes into any free AI chatbot. Notice how it's fully structured, grade-calibrated, and immediately usable.</p>
+
+    <div style="background:var(--gold-pale);border:1.5px solid rgba(204,176,0,0.3);border-radius:16px;padding:24px 28px;margin-bottom:16px;">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;">
+        <span style="background:var(--crimson);color:#fff;font-size:0.67rem;font-weight:800;padding:3px 12px;border-radius:20px;letter-spacing:0.5px;">10th Grade</span>
+        <span style="background:rgba(204,176,0,0.25);color:#7a6000;font-size:0.67rem;font-weight:800;padding:3px 12px;border-radius:20px;">On Level</span>
+        <span style="background:rgba(204,176,0,0.25);color:#7a6000;font-size:0.67rem;font-weight:800;padding:3px 12px;border-radius:20px;">Math</span>
+        <span style="background:var(--gray-light);color:var(--gray-text);font-size:0.67rem;font-weight:800;padding:3px 12px;border-radius:20px;">Linear Equations</span>
+        <span style="background:var(--gray-light);color:var(--gray-text);font-size:0.67rem;font-weight:800;padding:3px 12px;border-radius:20px;">Exam Review</span>
+      </div>
+      <pre style="white-space:pre-wrap;font-family:'Montserrat',sans-serif;font-size:0.78rem;line-height:1.75;color:var(--gray-text);margin:0;"><strong>You are an expert, encouraging tutor for a 10th Grade high school student.</strong>
+Skill level: On Level — Use standard grade-level language and a normal pace.
+
+Subject: Math
+Topic: Linear Equations
+Task: Exam Review
+Additional context from student: We just finished Chapter 6. My teacher says word problems will be on the test.
+
+Create a test-prep review for "Linear Equations" for a 10th Grade student (On Level).
+Include:
+• 3 most likely question types on a test
+• 4 facts/formulas/dates to memorize (bullets)
+• 2 common traps to avoid
+• 1 last-minute study tip
+Total under 300 words.
+
+Core rules:
+• Stay focused only on the topic above — no tangents
+• Match language complexity to the On Level level
+• Be warm, direct, and motivating — never condescending
+• Use clean formatting with clear labels
+• Do not add unrequested sections</pre>
+    </div>
+    <p style="font-size:0.75rem;color:var(--gray-text);font-weight:600;text-align:center;">↑ This entire block is copied and pasted into ChatGPT, Claude, Gemini, or Copilot — then the AI responds instantly with a structured review session.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-bg">
+  <div class="cta-inner">
+    <div class="cta-badge">Free · No Account · No Setup</div>
+    <h2 class="cta-title">Ready to Run Your <span>Next Study Hall?</span></h2>
+    <p class="cta-sub">Share the QR code above, open the generator on your phone to demo it, and let every Kappan build their first prompt tonight.</p>
+    <a class="btn-primary" href="kappa-prompt-generator.html" style="font-size:1rem;padding:16px 40px;justify-content:center;">
+      Launch the Generator
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>Kappa League <span>Study Tools</span></h3>
+      <p>A mentorship and academic development program of <a href="https://www.kappaalphasipsi1911.org" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:none;font-weight:700;">Kappa Alpha Psi Fraternity, Inc.</a> — empowering young men through education, leadership, and achievement since 1922.</p>
+      <p style="font-size:0.66rem;color:rgba(255,255,255,0.3);margin-top:6px;">🔒 No data collected · No account required</p>
+    </div>
+    <div>
+      <div class="footer-col-title">For Students</div>
+      <a class="footer-link" href="index.html">Home</a>
+      <a class="footer-link" href="kappa-prompt-generator.html">Study Prompt Generator</a>
+    </div>
+    <div>
+      <div class="footer-col-title">For Advisors</div>
+      <a class="footer-link" href="#quickstart">Quick Start Guide</a>
+      <a class="footer-link" href="#workflows">Study Hall Workflows</a>
+      <a class="footer-link" href="#qr">Get the QR Code</a>
+      <a class="footer-link" href="#activities">Activity Reference</a>
+    </div>
+    <div>
+      <div class="footer-col-title">Free Chatbots</div>
+      <a class="footer-link" href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT (OpenAI) ↗</a>
+      <a class="footer-link" href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic) ↗</a>
+      <a class="footer-link" href="https://gemini.google.com" target="_blank" rel="noopener">Gemini (Google) ↗</a>
+      <a class="footer-link" href="https://copilot.microsoft.com" target="_blank" rel="noopener">Copilot (Microsoft) ↗</a>
+    </div>
+  </div>
+  
+      <a href="mailto:mdtaylor@martaucydesigns.biz?subject=Kappa+League+Study+Tools+Feedback" style="font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Suggest a Subject or Report an Issue ↗</a>
+  <div class="footer-bottom">
+    <p>© 2026 Kappa League Academic Tools · Built for students in grades 6–12</p>
+    <p style="font-size:0.65rem;color:rgba(255,255,255,0.25);">v2.0 · Free to Use</p>
+  </div>
+</footer>
+
+<script>
+function copyQRLink(){
+  const url='https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html';
+  const notice=document.getElementById('qrCopyNotice');
+  function done(){notice.textContent='✓ Copied!';setTimeout(()=>notice.textContent='',2500);}
+  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(url).then(done);}
+  else{done();}
+}
+</script>
+</body>
+</html>

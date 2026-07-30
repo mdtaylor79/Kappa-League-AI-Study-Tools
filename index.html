@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Kappa League Study Tools — Home</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2370110C'/><text x='50' y='70' font-family='Arial,sans-serif' font-size='46' font-weight='900' text-anchor='middle' fill='%23FFD700'>KL</text></svg>"/>
+<meta name="description" content="Free AI study tool for grades 6–12. Build custom AI tutor prompts in seconds — tailored to your grade, subject, skill level, and learning goal. Works with ChatGPT, Claude, Gemini, and Copilot."/>
+<meta property="og:title" content="Kappa League Study Tools — Free AI Tutor Prompt Generator"/>
+<meta property="og:description" content="Custom AI tutor prompts for middle &amp; high school students. Pick your grade, subject, and goal — get expert help in under 60 seconds. No account needed."/>
+<meta property="og:url" content="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kappa League Study Tools — AI Tutor Prompts, Grades 6–12"/>
+<meta name="twitter:description" content="Free AI study prompt generator for middle and high school students. No account needed. Works with ChatGPT, Claude, Gemini &amp; Copilot."/>
+<link rel="canonical" href="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Kappa League Study Tools","description":"Free AI study prompt generator for grades 6–12. Build custom AI tutor prompts in seconds — tailored to your grade, subject, skill level, and learning goal.","url":"https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/","applicationCategory":"EducationalApplication","isAccessibleForFree":true,"operatingSystem":"Any","browserRequirements":"Requires JavaScript","audience":{"@type":"EducationalAudience","educationalRole":"student","audienceType":"Students in grades 6-12"},"creator":{"@type":"Organization","name":"Kappa Alpha Psi Fraternity — Kappa League","url":"https://www.kappaalphasipsi1911.org"}}</script>
 <style>
 :root {
   --crimson:#70110C; --crimson-dark:#4d0000; --crimson-deeper:#2a0000;
@@ -136,6 +147,8 @@ nav.scrolled{background:rgba(77,0,0,0.97);backdrop-filter:blur(8px);box-shadow:0
 .subjects-scroll{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:900px;margin:0 auto 48px;}
 .subj-pill{display:flex;align-items:center;gap:9px;padding:11px 20px;border-radius:30px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:#fff;font-size:0.8rem;font-weight:700;transition:all 0.2s;cursor:default;}
 .subj-pill:hover{background:rgba(255,215,0,0.2);border-color:var(--gold);color:var(--gold-light);}
+.subj-divider{flex-basis:100%;display:flex;align-items:center;gap:12px;font-size:0.63rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,215,0,0.45);padding:6px 0 2px;}
+.subj-divider::before,.subj-divider::after{content:'';flex:1;height:1px;background:rgba(255,215,0,0.18);}
 .subj-pill-icon{font-size:1.1rem;}
 .subjects-cta{text-align:center;}
 
@@ -240,6 +253,14 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
 .fade-in-delay-2{transition-delay:0.2s;}
 .fade-in-delay-3{transition-delay:0.3s;}
 .fade-in-delay-4{transition-delay:0.4s;}
+/* ── SHARE / QR ── */
+.cta-share-row{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:24px;}
+.btn-cta-share{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:30px;background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.3);color:rgba(255,255,255,0.85);font-family:'Montserrat',sans-serif;font-size:0.76rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-cta-share:hover{background:rgba(255,255,255,0.22);border-color:rgba(255,255,255,0.55);}
+.cta-qr-reveal{display:none;margin:16px auto 0;text-align:center;}
+.cta-qr-reveal img{border-radius:10px;border:3px solid rgba(255,215,0,0.4);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.cta-qr-reveal p{font-size:0.72rem;color:rgba(255,255,255,0.55);font-weight:600;margin-top:8px;}
+.share-notice-home{display:block;text-align:center;font-size:0.74rem;font-weight:700;color:var(--gold-light);height:18px;margin-top:6px;}
 
 /* ══════════════════════════════
    RESPONSIVE
@@ -260,7 +281,36 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
   .hero-h1{font-size:2rem;}
   .hiw-grid{grid-template-columns:1fr 1fr;}
 }
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
+  .hero-card,.hc-float-tag{animation:none!important;}
+  .fade-in{opacity:1!important;transform:none!important;}
+}
+
+/* ══════════════════════════════
+   DARK MODE
+══════════════════════════════ */
+@media(prefers-color-scheme:dark){
+  :root{--off-white:#141414;--gray-text:#e0d4c8;--gray-light:#252525;--gray-mid:#5a4e48;}
+  body{background:#141414;}
+  .hiw-card{background:#1e1e1e;border-color:rgba(112,17,12,0.25);}
+  .hiw-card:hover{box-shadow:0 10px 32px rgba(112,17,12,0.22);}
+  .hiw-num{color:#2d2d2d;}
+  .section-why{background:#191919;}
+  .quote-card{background:#1e1e1e;border-color:rgba(112,17,12,0.15);}
+  .hmodal-box{background:#1e1e1e;border-top-color:var(--crimson);}
+  .hmodal-title{color:var(--gold-light);}
+  .hmodal-desc,.hmodal-item-text{color:#e0d4c8;}
+  .hmodal-close{color:#5a4e48;}
+  .hmodal-tip{background:linear-gradient(135deg,#2a2200,#1e1800);border-color:var(--gold-dark);}
+  nav.scrolled{background:rgba(20,0,5,0.97);}
+}
 </style>
+<!-- Google Analytics 4 · Measurement ID: G-BW9X842TE7 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BW9X842TE7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BW9X842TE7');</script>
 </head>
 <body>
 
@@ -339,8 +389,8 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
 
           <div class="hc-label">Grade</div>
           <div class="hc-grade-row">
-            <div class="hc-grade">6th</div>
             <div class="hc-grade">7th</div>
+            <div class="hc-grade">8th</div>
             <div class="hc-grade active">9th</div>
             <div class="hc-grade">10th</div>
           </div>
@@ -433,6 +483,7 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
       <div class="subj-pill"><span class="subj-pill-icon">🌐</span> Web Development</div>
       <div class="subj-pill"><span class="subj-pill-icon">📊</span> Accounting</div>
       <div class="subj-pill"><span class="subj-pill-icon">💰</span> Finance</div>
+      <div class="subj-divider">Creative &amp; Career Skills</div>
       <div class="subj-pill"><span class="subj-pill-icon">🎵</span> Music Prompting</div>
       <div class="subj-pill"><span class="subj-pill-icon">🎬</span> Video Prompting</div>
     </div>
@@ -497,45 +548,50 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
           <div class="way-act"><span class="way-act-icon">🚀</span> Mini Project <span class="way-act-badge">Apply</span></div>
           <div class="way-act"><span class="way-act-icon">⚖️</span> Compare & Contrast <span class="way-act-badge">Analyze</span></div>
           <div class="way-act"><span class="way-act-icon">🗣️</span> Debate Both Sides <span class="way-act-badge">Critical</span></div>
+          <div class="way-act"><span class="way-act-icon">🌟</span> Real-World Examples <span class="way-act-badge">Connect</span></div>
+          <div class="way-act"><span class="way-act-icon">⚠️</span> Common Mistakes <span class="way-act-badge">Fix</span></div>
+          <div class="way-act"><span class="way-act-icon">📌</span> Summarize For Me <span class="way-act-badge">Review</span></div>
+          <div class="way-act"><span class="way-act-icon">✍️</span> Help Me Write <span class="way-act-badge">Write</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ QUOTES ══ -->
+<!-- ══ SCENARIOS ══ -->
 <section class="section-quotes" id="quotes">
   <div class="section-inner">
-    <div class="section-eyebrow fade-in">Student Voices</div>
-    <h2 class="section-title fade-in fade-in-delay-1">What Students Are <span>Saying</span></h2>
+    <div class="section-eyebrow fade-in">In Practice</div>
+    <h2 class="section-title fade-in fade-in-delay-1">See It <span>In Action</span></h2>
+    <p class="section-sub fade-in fade-in-delay-2" style="margin-bottom:32px;">Real ways students and mentors use the generator every day.</p>
     <div class="quotes-grid">
       <div class="quote-card fade-in fade-in-delay-1">
-        <p class="quote-text">I used the Exam Review prompt the night before my Algebra test. I actually understood what to study instead of just re-reading my notes for hours.</p>
+        <p class="quote-text">A 10th grader has an Algebra test in the morning. He picks <strong>Math → Linear Equations → Exam Review</strong>. The AI returns the three most-tested question types, four formulas to memorize, and two traps to avoid. Study time: 20 minutes.</p>
         <div class="quote-author">
-          <div class="quote-avatar qa-crimson">✊</div>
+          <div class="quote-avatar qa-crimson">🎯</div>
           <div>
-            <div class="quote-name">Marcus J.</div>
-            <div class="quote-grade">10th Grade · Math</div>
+            <div class="quote-name">Exam Review</div>
+            <div class="quote-grade">10th Grade · Math · On Level</div>
           </div>
         </div>
       </div>
       <div class="quote-card fade-in fade-in-delay-2">
-        <p class="quote-text">The Python flashcards were perfect for my vocab quiz. I copied them right into Quizlet and studied on the bus. Got a 94.</p>
+        <p class="quote-text">An 11th grader just finished Chapter 3 of Python class but can't get functions to click. He picks <strong>Python → Functions → Explain It</strong> at the Struggling level. The AI walks him through it with simple language, key terms, and a real-world analogy — no condescension.</p>
         <div class="quote-author">
-          <div class="quote-avatar qa-gold">💻</div>
+          <div class="quote-avatar qa-gold">🐍</div>
           <div>
-            <div class="quote-name">Devon T.</div>
-            <div class="quote-grade">11th Grade · Python</div>
+            <div class="quote-name">Explain It</div>
+            <div class="quote-grade">11th Grade · Python · Struggling</div>
           </div>
         </div>
       </div>
       <div class="quote-card fade-in fade-in-delay-3">
-        <p class="quote-text">I'm struggling in ELA but the "Explain It" prompt made the AI break things down like a real teacher. It didn't talk down to me either.</p>
+        <p class="quote-text">A chapter advisor opens the tool at the start of study hall, projects it, and has each Kappan build a prompt for his own subject. Within two minutes every student is in a real conversation with an AI tutor — no blank screens, no guessing where to start.</p>
         <div class="quote-author">
-          <div class="quote-avatar qa-dark">📖</div>
+          <div class="quote-avatar qa-dark">✊</div>
           <div>
-            <div class="quote-name">Jaylen W.</div>
-            <div class="quote-grade">7th Grade · Language Arts</div>
+            <div class="quote-name">Chapter Study Hall</div>
+            <div class="quote-grade">Kappa League Advisor Use Case</div>
           </div>
         </div>
       </div>
@@ -559,6 +615,15 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
       <div class="bot-chip"><div class="bot-chip-dot"></div>Works with Gemini</div>
       <div class="bot-chip"><div class="bot-chip-dot"></div>Works with Copilot</div>
     </div>
+    <div class="cta-share-row">
+      <button class="btn-cta-share" onclick="shareHome()">📋 Copy Link to Share</button>
+      <button class="btn-cta-share" onclick="toggleHomeQR()">📱 QR Code for Mentors</button>
+    </div>
+    <span class="share-notice-home" id="shareNoticeHome"></span>
+    <div class="cta-qr-reveal" id="homeQR">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html" alt="QR Code — Kappa League Study Tools" loading="lazy" width="160" height="160"/>
+      <p>Scan to open on any phone · share at chapter meetings</p>
+    </div>
   </div>
 </section>
 
@@ -567,7 +632,13 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
   <div class="footer-inner">
     <div class="footer-brand">
       <h3>Kappa League <span>Study Tools</span></h3>
-      <p>The Kappa League is a mentorship and academic development program of Kappa Alpha Psi Fraternity, Inc. — empowering young men through education, leadership, and achievement since 1922.</p>
+      <p>The Kappa League is a mentorship and academic development program of <a href="https://www.kappaalphasipsi1911.org" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:none;font-weight:700;">Kappa Alpha Psi Fraternity, Inc.</a> — empowering young men through education, leadership, and achievement since 1922.</p>
+      <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:10px;line-height:1.6;">🔒 This tool collects no data and requires no account. All prompt generation happens in your browser.</p>
+      <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
+        <a href="https://www.kappaalphasipsi1911.org" target="_blank" rel="noopener" style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Kappa Alpha Psi ↗</a>
+        <a href="for-advisors.html" style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">For Advisors ↗</a>
+        <a href="mailto:mdtaylor@martaucydesigns.biz?subject=Kappa+League+Study+Tools+Feedback" style="font-size:0.72rem;font-weight:700;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Suggest a Subject or Report an Issue ↗</a>
+      </div>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Explore</div>
@@ -575,6 +646,7 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
       <button class="footer-popup-btn" onclick="openHeroPopup('subjects')">Subjects</button>
       <button class="footer-popup-btn" onclick="openHeroPopup('features')">Features</button>
       <a href="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html" class="footer-col-link">Launch Generator →</a>
+      <a href="for-advisors.html" class="footer-col-link">For Advisors →</a>
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Free Chatbots</div>
@@ -679,6 +751,20 @@ function closeHmodal() {
 
 function closeHeroPopup(e) {
   if (e.target === document.getElementById('hmodalOverlay')) closeHmodal();
+}
+
+/* ── Share & QR ── */
+function shareHome() {
+  const url = 'https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/';
+  const notice = document.getElementById('shareNoticeHome');
+  function copied() { notice.textContent = '✓ Link copied!'; setTimeout(() => notice.textContent = '', 2500); }
+  if (navigator.share) { navigator.share({ title: 'Kappa League Study Tools', url }); }
+  else if (navigator.clipboard) { navigator.clipboard.writeText(url).then(copied); }
+  else { copied(); }
+}
+function toggleHomeQR() {
+  const el = document.getElementById('homeQR');
+  el.style.display = el.style.display === 'none' || !el.style.display ? 'block' : 'none';
 }
 </script>
 <!-- ══ HERO SECTION POPUPS ══ -->

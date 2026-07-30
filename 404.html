@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Page Not Found — Kappa League Study Tools</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2370110C'/><text x='50' y='70' font-family='Arial,sans-serif' font-size='46' font-weight='900' text-anchor='middle' fill='%23FFD700'>KL</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--crimson:#70110C;--crimson-dark:#4d0000;--gold:#FFD700;--gold-light:#FFE84D;--gold-dark:#CCB000;--off-white:#fdfaf4;--gray-text:#3a2a20;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#70110C;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;position:relative;overflow:hidden;}
+.bg-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,215,0,0.12);pointer-events:none;}
+.r1{width:600px;height:600px;top:-200px;right:-200px;}
+.r2{width:400px;height:400px;bottom:-150px;left:-150px;}
+.inner{position:relative;z-index:1;max-width:520px;}
+.badge{display:inline-block;background:rgba(255,215,0,0.2);border:1px solid rgba(255,215,0,0.35);color:var(--gold-light);font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 16px;border-radius:20px;margin-bottom:24px;}
+.error-num{font-size:clamp(5rem,18vw,9rem);font-weight:900;color:rgba(255,215,0,0.15);line-height:1;letter-spacing:-4px;margin-bottom:-10px;}
+h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;letter-spacing:-0.5px;margin-bottom:14px;}
+h1 span{color:var(--gold-light);}
+p{font-size:0.9rem;color:rgba(255,255,255,0.72);font-weight:500;line-height:1.7;max-width:400px;margin:0 auto 36px;}
+.btn-home{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:50px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);font-family:'Montserrat',sans-serif;font-size:0.95rem;font-weight:900;text-decoration:none;border:none;cursor:pointer;transition:all 0.25s;box-shadow:0 6px 28px rgba(255,215,0,0.4);}
+.btn-home:hover{transform:translateY(-3px);box-shadow:0 10px 36px rgba(255,215,0,0.55);}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:12px 24px;border-radius:50px;background:rgba(255,255,255,0.1);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-family:'Montserrat',sans-serif;font-size:0.83rem;font-weight:700;text-decoration:none;transition:all 0.2s;}
+.btn-secondary:hover{background:rgba(255,255,255,0.2);}
+.btns{display:flex;flex-direction:column;align-items:center;gap:0;}
+.footer-note{position:absolute;bottom:20px;font-size:0.68rem;color:rgba(255,255,255,0.3);font-weight:600;letter-spacing:0.5px;}
+@media(prefers-color-scheme:dark){body{background:#1a0008;}}
+@media(prefers-reduced-motion:reduce){*{transition-duration:0.01ms!important;}}
+<!-- Google Analytics 4 · Measurement ID: G-BW9X842TE7 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BW9X842TE7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BW9X842TE7');</script>
+</style>
+</head>
+<body>
+<div class="bg-ring r1"></div>
+<div class="bg-ring r2"></div>
+<div class="inner">
+  <div class="badge">Kappa League · Academic Tools</div>
+  <div class="error-num">404</div>
+  <h1>This page took a <span>wrong turn.</span></h1>
+  <p>The link you followed may be broken or the page may have moved. Head back and keep studying — your AI tutor is waiting.</p>
+  <div class="btns">
+    <a class="btn-home" href="kappa-prompt-generator.html">
+      Build a Study Prompt
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a class="btn-secondary" href="index.html">← Back to Home</a>
+  </div>
+</div>
+<div class="footer-note">Kappa League Study Tools · Free for Grades 6–12</div>
+</body>
+</html>

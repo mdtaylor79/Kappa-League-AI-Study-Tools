@@ -3,8 +3,19 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>KL Study Prompt Generator</title>
+<title>Kappa League Study Prompt Generator</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%2370110C'/><text x='50' y='70' font-family='Arial,sans-serif' font-size='46' font-weight='900' text-anchor='middle' fill='%23FFD700'>KL</text></svg>"/>
+<meta name="description" content="Kappa League Study Prompt Generator — build a custom AI tutor prompt in under 60 seconds. Choose your grade, subject, skill level, and learning activity. Free, no account required."/>
+<meta property="og:title" content="Kappa League Study Prompt Generator"/>
+<meta property="og:description" content="Build a custom AI tutor prompt in under 60 seconds. Grades 6–12, 12 subjects, 14 activities. Paste into any free AI chatbot."/>
+<meta property="og:url" content="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kappa League Study Prompt Generator"/>
+<meta name="twitter:description" content="Free AI study prompt generator for grades 6–12. No account needed."/>
+<link rel="canonical" href="https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Kappa League Study Prompt Generator","description":"Build a custom AI tutor prompt in under 60 seconds. Choose grade, subject, skill level, and learning activity. Works with ChatGPT, Claude, Gemini, and Copilot.","url":"https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html","applicationCategory":"EducationalApplication","isAccessibleForFree":true,"operatingSystem":"Any","browserRequirements":"Requires JavaScript","audience":{"@type":"EducationalAudience","educationalRole":"student","audienceType":"Students in grades 6-12"},"creator":{"@type":"Organization","name":"Kappa Alpha Psi Fraternity — Kappa League","url":"https://www.kappaalphasipsi1911.org"}}</script>
 <style>
 :root {
   --crimson:#70110C; --crimson-dark:#4d0000; --crimson-light:#8a1a14;
@@ -18,6 +29,9 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Montserrat',sans-serif;background:var(--off-white);color:var(--gray-text);min-height:100vh;display:flex;flex-direction:column;}
 
+/* ── SKIP TO CONTENT ── */
+.skip-link{position:absolute;top:-100px;left:16px;z-index:9999;padding:10px 20px;background:var(--gold);color:var(--crimson-dark);font-weight:800;font-size:0.85rem;border-radius:0 0 8px 8px;text-decoration:none;transition:top 0.2s;}
+.skip-link:focus{top:0;}
 /* ── TOP NAV BAR ── */
 .tool-nav{background:#2a0000;padding:0 24px;border-bottom:1px solid rgba(255,215,0,0.18);}
 .tool-nav-inner{max-width:900px;margin:0 auto;height:46px;display:flex;align-items:center;justify-content:space-between;}
@@ -107,6 +121,8 @@ header p{margin-top:8px;font-size:0.88rem;color:rgba(255,255,255,0.8);font-weigh
 .subject-icon{font-size:1.7rem;display:block;margin-bottom:5px;}
 .subject-name{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;color:var(--gray-text);line-height:1.3;}
 .subject-btn.selected .subject-name{color:#fff;}
+.subject-category-divider{grid-column:1/-1;font-size:0.63rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-dark);text-align:center;padding:10px 0 4px;display:flex;align-items:center;gap:10px;opacity:0.75;}
+.subject-category-divider::before,.subject-category-divider::after{content:'';flex:1;height:1px;background:var(--gray-mid);}
 
 /* ── TOPIC CARDS ── */
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:9px;}
@@ -144,6 +160,9 @@ header p{margin-top:8px;font-size:0.88rem;color:rgba(255,255,255,0.8);font-weigh
 .btn-generate{padding:13px 36px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);font-family:'Montserrat',sans-serif;font-size:0.88rem;font-weight:900;letter-spacing:0.5px;cursor:pointer;transition:all 0.22s;box-shadow:var(--shadow-gold);}
 .btn-generate:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(255,215,0,0.52);}
 .btn-generate:disabled{background:var(--gray-mid);color:#fff;box-shadow:none;cursor:not-allowed;transform:none;}
+.btn-regenerate{display:flex;align-items:center;gap:7px;padding:9px 20px;border-radius:30px;border:2px solid var(--crimson);background:transparent;color:var(--crimson);font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;transition:all 0.2s;letter-spacing:0.3px;}
+.btn-regenerate:hover{background:var(--crimson);color:#fff;}
+.variation-label{font-size:0.68rem;font-weight:700;color:var(--gray-mid);text-align:center;margin-top:6px;height:14px;}
 
 /* ── PROMPT OUTPUT ── */
 .prompt-output-wrap{animation:fadeUp 0.4s ease;}
@@ -156,6 +175,11 @@ header p{margin-top:8px;font-size:0.88rem;color:rgba(255,255,255,0.8);font-weigh
 .copy-notice.show{opacity:1;}
 .btn-copy{display:flex;align-items:center;gap:7px;padding:9px 22px;border-radius:30px;border:2px solid var(--gold);background:transparent;color:var(--gold-dark);font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:800;cursor:pointer;transition:all 0.2s;}
 .btn-copy:hover{background:var(--gold);color:var(--crimson-dark);}
+.btn-download{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:30px;border:2px solid var(--gray-mid);background:transparent;color:var(--gray-text);font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-download:hover{border-color:var(--crimson);color:var(--crimson);}
+.quick-nav{display:flex;justify-content:center;gap:20px;margin-top:8px;flex-wrap:wrap;}
+.quick-nav-link{background:none;border:none;font-family:'Montserrat',sans-serif;font-size:0.72rem;font-weight:700;color:var(--gray-mid);cursor:pointer;text-decoration:underline;transition:color 0.2s;padding:0;}
+.quick-nav-link:hover{color:var(--crimson);}
 
 /* ── CHATBOT TIPS ── */
 .chatbot-tips{margin-top:20px;background:var(--gray-light);border-radius:12px;padding:16px 20px;}
@@ -201,9 +225,26 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
 .footer-bottom{border-top:1px solid rgba(255,255,255,0.1);max-width:900px;margin:18px auto 0;padding-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
 .footer-bottom p{font-size:0.7rem;color:rgba(255,255,255,0.45);font-weight:500;}
 .version-badge{background:rgba(255,215,0,0.2);color:var(--gold-light);font-size:0.65rem;font-weight:800;letter-spacing:1px;padding:3px 10px;border-radius:10px;border:1px solid rgba(255,215,0,0.3);}
+/* ── SHARE SECTION ── */
+.share-section{margin-top:18px;padding:14px 18px;background:var(--gray-light);border-radius:12px;}
+.share-section-label{font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--gray-text);margin-bottom:10px;}
+.share-btns{display:flex;gap:9px;flex-wrap:wrap;}
+.btn-share{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:30px;border:2px solid var(--gray-mid);background:#fff;font-family:'Montserrat',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-text);cursor:pointer;transition:all 0.2s;}
+.btn-share:hover{border-color:var(--crimson);color:var(--crimson);}
+.qr-reveal{display:none;margin-top:14px;text-align:center;}
+.qr-reveal img{border-radius:10px;border:2px solid var(--gold-dark);box-shadow:0 4px 16px rgba(112,17,12,0.15);}
+.qr-reveal p{font-size:0.71rem;font-weight:600;color:#888;margin-top:7px;}
+.share-notice{font-size:0.73rem;font-weight:700;color:var(--gold-dark);display:block;margin-top:7px;height:16px;}
 
 /* ── HIDDEN ── */
 .hidden{display:none!important;}
+
+/* ── REDUCED MOTION ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;}
+  .hero-card,.hc-float-tag{animation:none!important;}
+  .fade-in{opacity:1!important;transform:none!important;}
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
@@ -216,6 +257,25 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   .tips-grid{grid-template-columns:1fr;}
   .footer-inner{flex-direction:column;}
   .tool-nav-logo{display:none;}
+  /* Show activity tooltip as visible description on mobile (no hover) */
+  .activity-tooltip{
+    position:static;
+    transform:none;
+    opacity:1;
+    pointer-events:none;
+    background:transparent;
+    color:#999;
+    border:none;
+    padding:5px 0 0;
+    font-size:0.64rem;
+    max-width:none;
+    white-space:normal;
+    box-shadow:none;
+    text-align:center;
+    line-height:1.35;
+  }
+  .activity-tooltip::after{display:none;}
+  .activity-btn{padding:12px 8px;}
 }
 
 /* ── MODAL ── */
@@ -239,9 +299,47 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
 .modal-cta{width:100%;padding:14px;border-radius:30px;border:none;background:linear-gradient(135deg,var(--crimson),var(--crimson-dark));color:#fff;font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 18px rgba(112,17,12,0.32);letter-spacing:0.4px;}
 .modal-cta:hover{transform:translateY(-2px);box-shadow:0 7px 24px rgba(112,17,12,0.44);}
 @media(max-width:500px){.modal-box{padding:28px 18px 24px;}.modal-title{font-size:1.05rem;}}
+
+/* ══════════════════════════════
+   DARK MODE
+══════════════════════════════ */
+@media(prefers-color-scheme:dark){
+  :root{--off-white:#141414;--gray-text:#e0d4c8;--gray-light:#252525;--gray-mid:#5a4e48;}
+  body{background:#141414;}
+  .card{background:#1e1e1e;}
+  .card-subtitle{color:#b0a49a;}
+  .grade-btn{background:#1e1e1e;color:#e0d4c8;border-color:#3a3030;}
+  .grade-btn:hover{border-color:var(--crimson);color:var(--crimson);}
+  .subject-btn{background:#1e1e1e;border-color:#3a3030;}
+  .subject-name{color:#e0d4c8;}
+  .topic-card{background:#1e1e1e;color:#e0d4c8;border-color:#3a3030;}
+  .topic-card:hover{border-color:var(--crimson);color:var(--crimson);}
+  .level-btn{background:#1e1e1e;border-color:#3a3030;}
+  .level-name{color:#e0d4c8;}
+  .activity-btn{background:#1e1e1e;border-color:#3a3030;}
+  .activity-name{color:#e0d4c8;}
+  .context-input{background:#1e1e1e;color:#e0d4c8;border-color:#3a3030;}
+  .chatbot-tips{background:#252525;}
+  .history-item{background:#252525;}
+  .history-item:hover{background:#2d2d2d;}
+  .share-section{background:#252525;}
+  .btn-share{background:#1e1e1e;color:#e0d4c8;border-color:#3a3030;}
+  .btn-download{background:#1e1e1e;color:#e0d4c8;border-color:#3a3030;}
+  .modal-box{background:#1e1e1e;}
+  .modal-title{color:var(--gold-light);}
+  .modal-desc,.modal-step-text{color:#e0d4c8;}
+  .modal-close{color:#5a4e48;}
+  .modal-tip{background:linear-gradient(135deg,#2a2200,#1e1800);border-color:var(--gold-dark);}
+  .subject-tip{background:linear-gradient(135deg,#2a2200,#1e1800);border-color:var(--gold-dark);color:#c8a800;}
+  .summary-chips .chip-outline{background:#252525;color:#e0d4c8;}
+}
 </style>
+<!-- Google Analytics 4 · Measurement ID: G-BW9X842TE7 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BW9X842TE7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BW9X842TE7');</script>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- TOP NAV -->
 <div class="tool-nav">
@@ -261,6 +359,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     <div class="header-badge">Kappa League · Academic Tools</div>
     <h1>Study <span>Prompt</span> Generator</h1>
     <p>Build powerful, token-efficient AI tutor prompts in seconds — tailored to your grade, level, subject, and goal.</p>
+    <a onclick="openPopup('hiw')" style="display:inline-block;margin-top:12px;color:var(--gold-light);font-weight:700;cursor:pointer;font-size:0.78rem;text-decoration:none;opacity:0.85;letter-spacing:0.3px;">✦ First time here? See how it works →</a>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
 </header>
@@ -273,21 +372,21 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
 <!-- STEPPER -->
 <div class="stepper-wrap">
   <div class="stepper">
-    <div class="step active" id="s1"><div class="step-num" onclick="jumpStep(1)">1</div><div class="step-label">Grade</div></div>
-    <div class="step" id="s2"><div class="step-num" onclick="jumpStep(2)">2</div><div class="step-label">Subject</div></div>
-    <div class="step" id="s3"><div class="step-num" onclick="jumpStep(3)">3</div><div class="step-label">Topic</div></div>
-    <div class="step" id="s4"><div class="step-num" onclick="jumpStep(4)">4</div><div class="step-label">Activity</div></div>
-    <div class="step" id="s5"><div class="step-num" onclick="jumpStep(5)">5</div><div class="step-label">Prompt</div></div>
+    <div class="step active" id="s1"><div class="step-num" onclick="jumpStep(1)" onkeydown="if(event.key==='Enter'||event.key===' ')jumpStep(1)" tabindex="0" role="button" aria-label="Go to step 1: Grade">1</div><div class="step-label">Grade</div></div>
+    <div class="step" id="s2"><div class="step-num" onclick="jumpStep(2)" onkeydown="if(event.key==='Enter'||event.key===' ')jumpStep(2)" tabindex="0" role="button" aria-label="Go to step 2: Subject">2</div><div class="step-label">Subject</div></div>
+    <div class="step" id="s3"><div class="step-num" onclick="jumpStep(3)" onkeydown="if(event.key==='Enter'||event.key===' ')jumpStep(3)" tabindex="0" role="button" aria-label="Go to step 3: Topic">3</div><div class="step-label">Topic</div></div>
+    <div class="step" id="s4"><div class="step-num" onclick="jumpStep(4)" onkeydown="if(event.key==='Enter'||event.key===' ')jumpStep(4)" tabindex="0" role="button" aria-label="Go to step 4: Activity">4</div><div class="step-label">Activity</div></div>
+    <div class="step" id="s5"><div class="step-num" onclick="jumpStep(5)" onkeydown="if(event.key==='Enter'||event.key===' ')jumpStep(5)" tabindex="0" role="button" aria-label="Go to step 5: Prompt">5</div><div class="step-label">Prompt</div></div>
   </div>
 </div>
 
-<main class="main">
+<main class="main" id="main-content">
 
   <!-- STEP 1 -->
   <div class="card" id="step1">
     <div class="card-title">Step 1 — Select Your Grade</div>
     <div class="card-subtitle">Choose the grade you are currently in.</div>
-    <div class="grade-grid">
+    <div class="grade-grid" role="group" aria-label="Select your grade">
       <button class="grade-btn" onclick="selectGrade(this,'6th Grade')">6th Grade</button>
       <button class="grade-btn" onclick="selectGrade(this,'7th Grade')">7th Grade</button>
       <button class="grade-btn" onclick="selectGrade(this,'8th Grade')">8th Grade</button>
@@ -303,7 +402,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   <div class="card hidden" id="step2">
     <div class="card-title">Step 2 — Subject & Skill Level</div>
     <div class="card-subtitle">Pick your subject, then tell us your skill level <em>for that subject</em> — you might be advanced in one and struggling in another.</div>
-    <div class="subject-grid">
+    <div class="subject-grid" role="group" aria-label="Select a subject">
       <button class="subject-btn" onclick="selectSubject(this,'Math')"><span class="subject-icon">➗</span><div class="subject-name">Math</div></button>
       <button class="subject-btn" onclick="selectSubject(this,'Science')"><span class="subject-icon">🔬</span><div class="subject-name">Science</div></button>
       <button class="subject-btn" onclick="selectSubject(this,'ELA')"><span class="subject-icon">📖</span><div class="subject-name">Language Arts</div></button>
@@ -314,13 +413,14 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
       <button class="subject-btn" onclick="selectSubject(this,'Web Development')"><span class="subject-icon">🌐</span><div class="subject-name">Web Development</div></button>
       <button class="subject-btn" onclick="selectSubject(this,'Accounting')"><span class="subject-icon">📊</span><div class="subject-name">Accounting</div></button>
       <button class="subject-btn" onclick="selectSubject(this,'Finance')"><span class="subject-icon">💰</span><div class="subject-name">Finance</div></button>
+      <div class="subject-category-divider">Creative &amp; Career Skills</div>
       <button class="subject-btn" onclick="selectSubject(this,'Music Production')"><span class="subject-icon">🎵</span><div class="subject-name">Music Prompting</div></button>
       <button class="subject-btn" onclick="selectSubject(this,'Video Production')"><span class="subject-icon">🎬</span><div class="subject-name">Video Prompting</div></button>
     </div>
     <div class="level-section hidden" id="levelSection">
       <div class="level-divider"></div>
       <div class="level-label">How are you doing in <span id="levelSubjectName">this subject</span>?</div>
-      <div class="level-grid">
+      <div class="level-grid" role="group" aria-label="Select your skill level">
         <button class="level-btn" onclick="selectLevel(this,'Struggling','Keep it very simple. Use basic language, short sentences, and extra encouragement.')">
           <span class="level-icon">🌱</span><div class="level-name">Struggling</div><div class="level-desc">I need extra help & simple explanations</div>
         </button>
@@ -358,7 +458,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   <div class="card hidden" id="step4">
     <div class="card-title">Step 4 — Pick a Learning Activity</div>
     <div class="card-subtitle">How should the AI tutor help you? Hover over any activity to see what it does.</div>
-    <div class="activity-grid">
+    <div class="activity-grid" role="group" aria-label="Select a learning activity">
       <button class="activity-btn" onclick="selectActivity(this,'Explain It')"><span class="activity-icon">📝</span><div class="activity-name">Explain It</div><div class="activity-tooltip">Break the concept into overview, key terms, and a relatable analogy. Great for first-time learning.</div></button>
       <button class="activity-btn" onclick="selectActivity(this,'Quiz Me')"><span class="activity-icon">❓</span><div class="activity-name">Quiz Me</div><div class="activity-tooltip">5-question mixed quiz (multiple choice + short answer) with a full answer key at the end.</div></button>
       <button class="activity-btn" onclick="selectActivity(this,'Study Guide')"><span class="activity-icon">📋</span><div class="activity-name">Study Guide</div><div class="activity-tooltip">Structured overview: key concepts, vocabulary, and "Remember This" tips — great for review night.</div></button>
@@ -386,11 +486,22 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     <div class="card-subtitle">Paste this into ChatGPT, Claude, Gemini, or any AI chatbot — start a <strong>new chat</strong> for best results.</div>
     <div class="summary-chips" id="summaryChips"></div>
     <div class="prompt-output-wrap">
-      <div class="prompt-label">Generated Prompt</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="prompt-label" style="margin-bottom:0;">Generated Prompt</div>
+        <button class="btn-regenerate" onclick="regeneratePrompt()" title="Try a different angle on the same topic">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Try a Different Angle
+        </button>
+      </div>
+      <div class="variation-label" id="variationLabel"></div>
       <div class="prompt-box">
         <div class="prompt-text" id="promptOutput"></div>
         <div class="copy-row">
           <span class="copy-notice" id="copyNotice">✓ Copied to clipboard!</span>
+          <button class="btn-download" onclick="downloadPrompt()" title="Save as .txt file">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download .txt
+          </button>
           <button class="btn-copy" onclick="copyPrompt()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Copy Prompt
@@ -407,13 +518,32 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
         <div class="tip-item"><div class="tip-dot">4</div><span>Free plans have message limits — save long responses by copying them to your notes</span></div>
       </div>
     </div>
-    <div class="history-section" id="historySection" style="display:none;">
+    <div class="history-section" id="historySection">
       <div class="history-title">Session History</div>
       <div class="history-list" id="historyList"></div>
     </div>
+    <!-- SHARE -->
+    <div class="share-section">
+      <div class="share-section-label">📤 Share This Tool</div>
+      <div class="share-btns">
+        <button class="btn-share" onclick="shareToolLink()">📋 Copy Link</button>
+        <button class="btn-share" onclick="toggleQRCode()">📱 QR Code for Mentors</button>
+      </div>
+      <span class="share-notice" id="shareNotice"></span>
+      <div class="qr-reveal" id="qrReveal">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html" alt="QR Code — Kappa League Study Tools" loading="lazy" width="160" height="160"/>
+        <p>Scan to open on any phone · share at chapter meetings or study hall</p>
+      </div>
+    </div>
+
     <div class="nav-row" style="margin-top:20px;">
       <button class="btn-back" onclick="goStep(4)">← Change Activity</button>
       <button class="btn-next" onclick="goStep(1)" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--crimson-dark);box-shadow:var(--shadow-gold);">↩ New Prompt</button>
+    </div>
+    <div class="quick-nav">
+      <button class="quick-nav-link" onclick="goStep(3)">← Change Topic</button>
+      <button class="quick-nav-link" onclick="goStep(2)">← Change Subject</button>
+      <button class="quick-nav-link" onclick="goStep(1)">← Change Grade</button>
     </div>
   </div>
 
@@ -424,8 +554,10 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   <div class="footer-inner">
     <div class="footer-brand">
       <h3>Kappa League <span>Study Tools</span></h3>
-      <p>The Kappa League is a mentorship and academic development program of Kappa Alpha Psi Fraternity, Inc. — empowering young men through education, leadership, and achievement.</p>
+      <p>The Kappa League is a mentorship and academic development program of <a href="https://www.kappaalphasipsi1911.org" target="_blank" rel="noopener" style="color:var(--gold-light);text-decoration:none;font-weight:700;">Kappa Alpha Psi Fraternity, Inc.</a> — empowering young men through education, leadership, and achievement.</p>
+      <p style="font-size:0.68rem;color:rgba(255,255,255,0.35);margin-top:8px;line-height:1.6;">🔒 No data collected · No account required · All generation happens in your browser</p>
       <a href="index.html" class="footer-home-link">← Back to Home Page</a>
+      <a href="mailto:mdtaylor@martaucydesigns.biz?subject=Kappa+League+Study+Tools+Feedback" class="footer-home-link" style="color:rgba(255,255,255,0.5);font-size:0.68rem;margin-top:4px;">Suggest a Subject or Report an Issue →</a>
     </div>
     <div class="footer-links">
       <div class="footer-links-title">Supported Chatbots</div>
@@ -437,6 +569,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     <div class="footer-links">
       <div class="footer-links-title">How to Use</div>
       <button class="footer-link-btn" onclick="openPopup('hiw')">→ How It Works</button>
+      <a class="footer-link" href="for-advisors.html">→ For Advisors</a>
       <button class="footer-link-btn" onclick="openPopup('grade')">→ Pick your grade &amp; level</button>
       <button class="footer-link-btn" onclick="openPopup('subject')">→ Choose subject &amp; topic</button>
       <button class="footer-link-btn" onclick="openPopup('activity')">→ Select a learning activity</button>
@@ -444,15 +577,15 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 Kappa League Academic Tools · Built for students in grades 6–12</p>
+    <p>© 2026 Kappa League Academic Tools · Built for students in grades 6–12</p>
     <div class="version-badge">v2.0</div>
   </div>
 </footer>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closePopupOutside(event)">
+<div class="modal-overlay" id="modalOverlay" onclick="closePopupOutside(event)" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal-box" id="modalBox">
-    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
     <div class="modal-badge" id="modalBadge"></div>
     <div class="modal-icon" id="modalIcon"></div>
     <h2 class="modal-title" id="modalTitle"></h2>
@@ -465,6 +598,13 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
 
 <script>
 const state = { grade:'', level:'', levelNote:'', subject:'', topic:'', activity:'', context:'', currentStep:1 };
+const promptVariations = [
+  { angle:'Standard', note:'' },
+  { angle:'Analogy-First', note:'\nInstruction: Lead with a vivid real-world analogy or memorable story BEFORE explaining the concept formally.' },
+  { angle:'Misconception-First', note:'\nInstruction: Open by naming the #1 misconception students have about this topic, then correct it with clarity.' },
+  { angle:'Step-by-Step', note:'\nInstruction: Break EVERYTHING into the smallest possible numbered steps. Assume zero prior knowledge entering each step.' },
+];
+let currentVariation = 0;
 const promptHistory = [];
 
 /* ── DATA ── */
@@ -641,11 +781,26 @@ function buildPrompt(){
   const fn=activityInstructions[activity];
   const taskBlock=fn?fn(grade,topic,level):`Help me with "${topic}" — ${activity}`;
   const contextBlock=context&&context.trim()?`\nAdditional context from student: ${context.trim()}`:'';
-  const prompt=`You are an expert, encouraging tutor for a ${grade} ${schoolLevel} student.\nSkill level: ${level} — ${levelNote}\n\nSubject: ${subject}\nTopic: ${topic}\nTask: ${activity}\n${contextBlock}\n${taskBlock}\n\nCore rules:\n• Stay focused only on the topic above — no tangents\n• Match language complexity to the ${level} level\n• Be warm, direct, and motivating — never condescending\n• Use clean formatting with clear labels\n• Do not add unrequested sections`;
+  const variation=promptVariations[currentVariation];
+  const prompt=`You are an expert, encouraging tutor for a ${grade} ${schoolLevel} student.\nSkill level: ${level} — ${levelNote}\n\nSubject: ${subject}\nTopic: ${topic}\nTask: ${activity}\n${contextBlock}\n${taskBlock}${variation.note}\n\nCore rules:\n• Stay focused only on the topic above — no tangents\n• Match language complexity to the ${level} level\n• Be warm, direct, and motivating — never condescending\n• Use clean formatting with clear labels\n• Do not add unrequested sections`;
+  const vlabel=document.getElementById('variationLabel');
+  if(vlabel)vlabel.textContent=variation.angle==='Standard'?'':`Angle: ${variation.angle} (${currentVariation+1} of ${promptVariations.length})`;
   document.getElementById('promptOutput').textContent=prompt;
   const lc={Struggling:'chip-green','On Level':'chip-outline',Advanced:'chip-gold'};
   document.getElementById('summaryChips').innerHTML=`<span class="chip chip-crimson">${grade}</span><span class="chip ${lc[level]||'chip-outline'}">${level}</span><span class="chip chip-gold">${subject}</span><span class="chip chip-outline">${topic}</span><span class="chip chip-outline">${activity}</span>`+(context?`<span class="chip chip-green">+ Context Added</span>`:'');
   saveHistory(grade,subject,topic,activity,prompt);
+  /* Update URL so this config can be shared */
+  try {
+    const p = new URLSearchParams({
+      grade: state.grade,
+      level: state.level,
+      subject: state.subject,
+      topic: state.topic,
+      activity: state.activity
+    });
+    history.replaceState(null, '', '?' + p.toString());
+  } catch(e){}
+
 }
 function saveHistory(grade,subject,topic,activity,prompt){
   promptHistory.unshift({grade,subject,topic,activity,prompt,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
@@ -653,8 +808,11 @@ function saveHistory(grade,subject,topic,activity,prompt){
 }
 function renderHistory(){
   const section=document.getElementById('historySection'),list=document.getElementById('historyList');
-  if(promptHistory.length<2){section.style.display='none';return;}
   section.style.display='block';
+  if(promptHistory.length<2){
+    list.innerHTML='<div style="font-size:0.73rem;color:#bbb;padding:8px 2px;font-weight:600;">Generate another prompt to start building your session history.</div>';
+    return;
+  }
   list.innerHTML=promptHistory.slice(1).map((h,i)=>`<div class="history-item" onclick="loadHistory(${i+1})"><div class="history-meta"><span>${h.subject}</span> · ${h.topic} · ${h.activity}<br>${h.grade} · ${h.time}</div><div class="history-reuse">↩ Reload</div></div>`).join('');
 }
 function loadHistory(idx){
@@ -699,6 +857,117 @@ function openPopup(key){
 }
 function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
 function closePopupOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+/* ── Share & QR ── */
+function shareToolLink(){
+  const url=window.location.href.split('?')[0]+(window.location.search||'');
+  const notice=document.getElementById('shareNotice');
+  function copied(){notice.textContent='✓ Link copied!';setTimeout(()=>notice.textContent='',2500);}
+  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(url).then(copied);}
+  else{copied();}
+}
+function toggleQRCode(){
+  const el=document.getElementById('qrReveal');
+  el.style.display=el.style.display==='block'?'none':'block';
+}
+
+/* ── Download prompt as .txt ── */
+function regeneratePrompt(){
+  currentVariation=(currentVariation+1)%promptVariations.length;
+  buildPrompt();
+  window.scrollTo({top:document.getElementById('step5').offsetTop-20,behavior:'smooth'});
+}
+function downloadPrompt(){
+  const{grade,level,subject,topic,activity}=state;
+  const text=document.getElementById('promptOutput').textContent;
+  const filename=`KL_${subject}_${topic}_${activity}`.replace(/[^a-zA-Z0-9_]/g,'_').replace(/_+/g,'_')+'.txt';
+  const blob=new Blob([text],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  URL.revokeObjectURL(a.href);
+}
+/* ── KEYBOARD NAVIGATION ── */
+document.addEventListener('keydown', function(e) {
+  // Escape closes modal
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('modalOverlay');
+    if (overlay.classList.contains('open')) { closeModal(); return; }
+    const hoverlay = document.getElementById('hmodalOverlay');
+    if (hoverlay && hoverlay.classList.contains('open')) { return; }
+  }
+});
+
+/* ── FOCUS TRAP in modal ── */
+function trapFocus(el) {
+  const focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const first = focusable[0], last = focusable[focusable.length - 1];
+  el.addEventListener('keydown', function trap(e) {
+    if (e.key !== 'Tab') return;
+    if (e.shiftKey) { if (document.activeElement === first) { last.focus(); e.preventDefault(); } }
+    else { if (document.activeElement === last) { first.focus(); e.preventDefault(); } }
+  });
+}
+
+// Wire up focus trap and auto-focus modal on open
+const _origOpenPopup = openPopup;
+function openPopup(key) {
+  _origOpenPopup(key);
+  const box = document.getElementById('modalBox');
+  const closeBtn = box.querySelector('.modal-close');
+  setTimeout(() => { closeBtn && closeBtn.focus(); trapFocus(box); }, 50);
+}
+
+/* ── URL PARAM RESTORE ── */
+function initFromURL() {
+  const p = new URLSearchParams(window.location.search);
+  const grade = p.get('grade'), level = p.get('level'),
+        subject = p.get('subject'), topic = p.get('topic'), activity = p.get('activity');
+  if (!grade || !level || !subject || !topic || !activity) return;
+
+  // Restore grade
+  const gradeBtn = Array.from(document.querySelectorAll('.grade-btn'))
+    .find(b => b.textContent.trim() === grade);
+  if (!gradeBtn) return;
+  selectGrade(gradeBtn, grade);
+
+  // Restore subject
+  const subjectBtn = Array.from(document.querySelectorAll('.subject-btn'))
+    .find(b => {
+      const oc = b.getAttribute('onclick') || '';
+      return oc.includes("'" + subject + "'");
+    });
+  if (!subjectBtn) return;
+  selectSubject(subjectBtn, subject);
+
+  // Restore level
+  const levelBtn = Array.from(document.querySelectorAll('.level-btn'))
+    .find(b => (b.querySelector('.level-name')||{}).textContent === level);
+  if (levelBtn) levelBtn.click();
+
+  // Populate topics so topic can be selected
+  populateTopics();
+
+  // Restore topic
+  const topicCard = Array.from(document.querySelectorAll('.topic-card'))
+    .find(b => b.textContent.trim() === topic);
+  if (topicCard) { selectTopic(topicCard, topic); }
+
+  // Restore activity
+  const actBtn = Array.from(document.querySelectorAll('.activity-btn'))
+    .find(b => {
+      const oc = b.getAttribute('onclick') || '';
+      return oc.includes("'" + activity + "'");
+    });
+  if (actBtn) { selectActivity(actBtn, activity); }
+
+  // Jump to step 5 if everything is set
+  if (state.grade && state.level && state.subject && state.topic && state.activity) {
+    goStep(5);
+  }
+}
+initFromURL();
+
 </script>
 </body>
 </html>
