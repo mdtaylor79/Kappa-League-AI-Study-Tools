@@ -443,8 +443,15 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     <div class="card-title">Step 3 — Select a Topic</div>
     <div class="card-subtitle">Choose the specific topic you need help with.</div>
     <div class="subject-tip" id="subjectTip"></div>
+    <div class="topic-search-wrap">
+      <span class="topic-search-icon">🔍</span>
+      <input type="text" id="topicSearch" class="topic-search" placeholder="Search topics..." oninput="filterTopics(this.value)" autocomplete="off" aria-label="Search topics"/>
+    </div>
+    <div class="topic-no-results" id="topicNoResults">No topics match your search.</div>
     <div class="topic-grid" id="topicGrid"></div>
     <div class="context-section">
+      <div class="context-pills-label">Quick fill examples:</div>
+      <div class="context-pills" id="contextPills"></div>
       <div class="context-label">Add context for a better prompt <span>Optional</span></div>
       <textarea class="context-input" id="contextInput" placeholder="e.g. We just finished Chapter 5 on linear equations... my teacher wants us to focus on word problems... I have a test on Friday about cell division..."></textarea>
     </div>
@@ -458,6 +465,15 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   <div class="card hidden" id="step4">
     <div class="card-title">Step 4 — Pick a Learning Activity</div>
     <div class="card-subtitle">How should the AI tutor help you? Hover over any activity to see what it does.</div>
+    <div class="helper-wrap">
+      <button class="helper-toggle" onclick="toggleActivityHelper(this)" aria-expanded="false">💡 Not sure which to pick? Help me choose</button>
+      <div class="helper-scenarios" id="helperScenarios" role="group" aria-label="Situational activity recommendations">
+        <button class="scenario-btn" onclick="recommendActivity('exam')">📅 I have a test tomorrow</button>
+        <button class="scenario-btn" onclick="recommendActivity('confused')">😕 I'm confused about this</button>
+        <button class="scenario-btn" onclick="recommendActivity('practice')">✏️ I need to practice</button>
+        <button class="scenario-btn" onclick="recommendActivity('starting')">📖 I'm starting fresh</button>
+      </div>
+    </div>
     <div class="activity-grid" role="group" aria-label="Select a learning activity">
       <button class="activity-btn" onclick="selectActivity(this,'Explain It')"><span class="activity-icon">📝</span><div class="activity-name">Explain It</div><div class="activity-tooltip">Break the concept into overview, key terms, and a relatable analogy. Great for first-time learning.</div></button>
       <button class="activity-btn" onclick="selectActivity(this,'Quiz Me')"><span class="activity-icon">❓</span><div class="activity-name">Quiz Me</div><div class="activity-tooltip">5-question mixed quiz (multiple choice + short answer) with a full answer key at the end.</div></button>
@@ -509,6 +525,16 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
         </div>
       </div>
     </div>
+    <div class="prompt-word-count" id="promptWordCount"></div>
+    <div class="chatbot-quicklinks">
+      <div class="chatbot-quicklinks-label">Open a chatbot and paste your prompt:</div>
+      <div class="chatbot-quicklinks-row">
+        <a href="https://chat.openai.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">💬 ChatGPT</a>
+        <a href="https://claude.ai/new" target="_blank" rel="noopener" class="chatbot-ql-btn">✨ Claude</a>
+        <a href="https://gemini.google.com/app" target="_blank" rel="noopener" class="chatbot-ql-btn">🔷 Gemini</a>
+        <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">🪟 Copilot</a>
+      </div>
+    </div>
     <div class="chatbot-tips">
       <div class="tips-title">💡 Tips for Getting the Best Response</div>
       <div class="tips-grid">
@@ -519,7 +545,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
       </div>
     </div>
     <div class="history-section" id="historySection">
-      <div class="history-title">Session History</div>
+      <div class="history-title">Prompt History <button class="history-clear-btn" onclick="clearHistory()" title="Clear saved history">Clear</button></div>
       <div class="history-list" id="historyList"></div>
     </div>
     <!-- SHARE -->
@@ -735,7 +761,7 @@ function selectSubject(btn,subject){
   setTimeout(()=>ls.scrollIntoView({behavior:'smooth',block:'nearest'}),120);
 }
 function selectTopic(card,topic){document.querySelectorAll('.topic-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');state.topic=topic;document.getElementById('next3').disabled=false;}
-function selectActivity(btn,name){document.querySelectorAll('.activity-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');state.activity=name;document.getElementById('btnGenerate').disabled=false;}
+function selectActivity(btn,name){document.querySelectorAll('.activity-btn').forEach(b=>{b.classList.remove('selected');b.classList.remove('recommended');});btn.classList.add('selected');state.activity=name;document.getElementById('btnGenerate').disabled=false;}
 
 function goStep(n){
   if(n===2&&!state.grade)return;
@@ -774,6 +800,12 @@ function populateTopics(){
   document.getElementById('contextInput').value=state.context;
   document.getElementById('contextInput').oninput=(e)=>{state.context=e.target.value;};
   document.getElementById('next3').disabled=!state.topic;
+  // Reset topic search
+  const ts=document.getElementById('topicSearch');if(ts)ts.value='';
+  document.querySelectorAll('.topic-card').forEach(c=>c.style.display='');
+  const nr=document.getElementById('topicNoResults');if(nr)nr.style.display='none';
+  // Render context pills
+  renderContextPills();
 }
 function buildPrompt(){
   const{grade,level,levelNote,subject,topic,activity,context}=state;
@@ -787,6 +819,10 @@ function buildPrompt(){
   if(vlabel)vlabel.textContent=variation.angle==='Standard'?'':`Angle: ${variation.angle} (${currentVariation+1} of ${promptVariations.length})`;
   document.getElementById('promptOutput').textContent=prompt;
   const lc={Struggling:'chip-green','On Level':'chip-outline',Advanced:'chip-gold'};
+  /* Word count */
+  const wc = prompt.trim().split(/\s+/).filter(w=>w.length>0).length;
+  const wcEl = document.getElementById('promptWordCount');
+  if(wcEl) wcEl.textContent = '~'+wc+' words · works on all free AI plans';
   document.getElementById('summaryChips').innerHTML=`<span class="chip chip-crimson">${grade}</span><span class="chip ${lc[level]||'chip-outline'}">${level}</span><span class="chip chip-gold">${subject}</span><span class="chip chip-outline">${topic}</span><span class="chip chip-outline">${activity}</span>`+(context?`<span class="chip chip-green">+ Context Added</span>`:'');
   saveHistory(grade,subject,topic,activity,prompt);
   /* Update URL so this config can be shared */
@@ -804,13 +840,15 @@ function buildPrompt(){
 }
 function saveHistory(grade,subject,topic,activity,prompt){
   promptHistory.unshift({grade,subject,topic,activity,prompt,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
-  if(promptHistory.length>5)promptHistory.pop();renderHistory();
+  if(promptHistory.length>5)promptHistory.pop();
+  saveToStorage();
+  renderHistory();
 }
 function renderHistory(){
   const section=document.getElementById('historySection'),list=document.getElementById('historyList');
   section.style.display='block';
   if(promptHistory.length<2){
-    list.innerHTML='<div style="font-size:0.73rem;color:#bbb;padding:8px 2px;font-weight:600;">Generate another prompt to start building your session history.</div>';
+    list.innerHTML='<div style="font-size:0.73rem;color:#bbb;padding:8px 2px;font-weight:600;">Generate another prompt to build your history — it saves between sessions.</div>';
     return;
   }
   list.innerHTML=promptHistory.slice(1).map((h,i)=>`<div class="history-item" onclick="loadHistory(${i+1})"><div class="history-meta"><span>${h.subject}</span> · ${h.topic} · ${h.activity}<br>${h.grade} · ${h.time}</div><div class="history-reuse">↩ Reload</div></div>`).join('');
@@ -917,6 +955,99 @@ function openPopup(key) {
   const closeBtn = box.querySelector('.modal-close');
   setTimeout(() => { closeBtn && closeBtn.focus(); trapFocus(box); }, 50);
 }
+
+/* ── LOCALSTORAGE HISTORY ── */
+function saveToStorage(){
+  try{localStorage.setItem('kl_prompt_history',JSON.stringify(promptHistory.slice(0,5)));}catch(e){}
+}
+function loadFromStorage(){
+  try{
+    const saved=localStorage.getItem('kl_prompt_history');
+    if(saved){
+      const h=JSON.parse(saved);
+      h.forEach(item=>{if(!promptHistory.some(p=>p.prompt===item.prompt))promptHistory.push(item);});
+    }
+  }catch(e){}
+}
+function clearHistory(){
+  promptHistory.length=0;
+  try{localStorage.removeItem('kl_prompt_history');}catch(e){}
+  renderHistory();
+}
+
+/* ── TOPIC FILTER ── */
+function filterTopics(q){
+  const lower=q.toLowerCase().trim();
+  let anyVisible=false;
+  document.querySelectorAll('.topic-card').forEach(card=>{
+    const match=!lower||card.textContent.toLowerCase().includes(lower);
+    card.style.display=match?'':'none';
+    if(match)anyVisible=true;
+  });
+  const nr=document.getElementById('topicNoResults');
+  if(nr)nr.style.display=(!anyVisible&&lower)?'block':'none';
+}
+
+/* ── CONTEXT PILLS ── */
+const contextPillData={
+  'Math':['Just finished Chapter [#]','Teacher focuses on word problems','Test is this Friday'],
+  'Science':['Covered this in lab last week','Teacher emphasized diagrams','Quiz is Thursday'],
+  'ELA':["We're reading [book title]",'Teacher wants a strong thesis','Essay due Monday'],
+  'Social Studies':['Studying [current unit]','Teacher focuses on primary sources','Test next week'],
+  'History':['Just finished [era/chapter]','Teacher focuses on causes & effects','DBQ essay coming up'],
+  'Business':['Writing a business plan','Teacher uses real company examples','Project due Friday'],
+  'Python':['Just covered this in class','Working on a coding project','Coding exam next week'],
+  'Web Development':['Building a class project','Have a portfolio assignment','Using VS Code / Replit'],
+  'Accounting':['On Chapter [#] — debits & credits','Teacher uses T-account diagrams','Exam covers journal entries'],
+  'Finance':['Working on a budgeting project','Teacher connects this to real life','Personal finance quiz soon'],
+  'Music Production':['Using [DAW name] in class','Making a beat for a project','Need to understand AI music tools'],
+  'Video Production':['Filming a class project','We use Adobe Premiere / CapCut','Need to storyboard a short video'],
+};
+function renderContextPills(){
+  const container=document.getElementById('contextPills');
+  if(!container)return;
+  const pills=contextPillData[state.subject]||['Just finished this chapter','Test is this Friday','Teacher focuses on [aspect]'];
+  container.innerHTML=pills.map(p=>`<button class="context-pill" onclick="fillContext(${JSON.stringify(p)})">${p}</button>`).join('');
+}
+function fillContext(text){
+  const ta=document.getElementById('contextInput');
+  if(!ta)return;
+  ta.value=text;state.context=text;ta.focus();
+  const b=text.indexOf('[');const e=text.indexOf(']');
+  if(b!==-1&&e!==-1)ta.setSelectionRange(b,e+1);
+}
+
+/* ── ACTIVITY HELPER ── */
+const activityRecs={
+  exam:['Exam Review','Study Guide','Flashcard Set','Common Mistakes'],
+  confused:['Explain It','Real-World Examples','Vocabulary Builder','Summarize For Me'],
+  practice:['Practice Problems','Quiz Me','Flashcard Set','Mini Project'],
+  starting:['Explain It','Study Guide','Real-World Examples','Summarize For Me'],
+};
+function toggleActivityHelper(btn){
+  const panel=document.getElementById('helperScenarios');
+  const isOpen=panel.classList.contains('open');
+  panel.classList.toggle('open',!isOpen);
+  btn.classList.toggle('open',!isOpen);
+  btn.setAttribute('aria-expanded',String(!isOpen));
+}
+function recommendActivity(scenario){
+  const recs=activityRecs[scenario]||[];
+  document.querySelectorAll('.activity-btn').forEach(b=>b.classList.remove('recommended'));
+  document.querySelectorAll('.activity-btn').forEach(btn=>{
+    const nameEl=btn.querySelector('.activity-name');
+    if(nameEl&&recs.includes(nameEl.textContent.trim()))btn.classList.add('recommended');
+  });
+  const panel=document.getElementById('helperScenarios');
+  const toggle=document.querySelector('.helper-toggle');
+  panel.classList.remove('open');
+  if(toggle){toggle.classList.remove('open');toggle.setAttribute('aria-expanded','false');}
+  const first=document.querySelector('.activity-btn.recommended');
+  if(first)setTimeout(()=>first.scrollIntoView({behavior:'smooth',block:'nearest'}),50);
+}
+
+// Load history from localStorage on startup
+loadFromStorage();
 
 /* ── URL PARAM RESTORE ── */
 function initFromURL() {
