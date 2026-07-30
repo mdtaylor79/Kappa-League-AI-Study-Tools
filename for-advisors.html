@@ -480,7 +480,7 @@ function copyQRLink(){
   const url='https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/kappa-prompt-generator.html';
   const notice=document.getElementById('qrCopyNotice');
   function done(){notice.textContent='✓ Copied!';setTimeout(()=>notice.textContent='',2500);}
-  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url});}
+  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url}).catch(err=>{if(err.name!=='AbortError')console.warn(err);});}
   else if(navigator.clipboard){navigator.clipboard.writeText(url).then(done);}
   else{done();}
 }

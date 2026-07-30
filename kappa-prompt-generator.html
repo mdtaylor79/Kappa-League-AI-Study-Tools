@@ -333,6 +333,54 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
   .subject-tip{background:linear-gradient(135deg,#2a2200,#1e1800);border-color:var(--gold-dark);color:#c8a800;}
   .summary-chips .chip-outline{background:#252525;color:#e0d4c8;}
 }
+
+/* ── TOPIC SEARCH ── */
+.topic-search-wrap{margin-bottom:14px;position:relative;}
+.topic-search{width:100%;padding:10px 16px 10px 38px;border-radius:30px;border:1.5px solid var(--gray-mid);font-family:'Montserrat',sans-serif;font-size:0.83rem;font-weight:600;color:var(--gray-text);background:#fff;outline:none;transition:border-color 0.2s;}
+.topic-search:focus{border-color:var(--crimson);}
+.topic-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:0.85rem;pointer-events:none;}
+.topic-no-results{font-size:0.8rem;color:var(--gray-mid);font-weight:600;padding:12px 2px;display:none;}
+
+/* ── CONTEXT PILLS ── */
+.context-pills-label{font-size:0.68rem;font-weight:800;color:var(--gray-mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.context-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.context-pill{padding:4px 12px;border-radius:20px;background:rgba(112,17,12,0.07);border:1px solid rgba(112,17,12,0.15);font-family:'Montserrat',sans-serif;font-size:0.7rem;font-weight:700;color:var(--crimson);cursor:pointer;transition:all 0.18s;}
+.context-pill:hover{background:rgba(112,17,12,0.15);}
+
+/* ── ACTIVITY HELPER ── */
+.helper-wrap{margin-bottom:14px;}
+.helper-toggle{background:none;border:1.5px dashed rgba(112,17,12,0.25);border-radius:30px;padding:7px 18px;font-family:'Montserrat',sans-serif;font-size:0.74rem;font-weight:700;color:var(--gray-mid);cursor:pointer;transition:all 0.2s;}
+.helper-toggle:hover,.helper-toggle.open{border-color:var(--crimson);color:var(--crimson);}
+.helper-scenarios{display:none;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.helper-scenarios.open{display:flex;}
+.scenario-btn{padding:7px 14px;border-radius:20px;border:1.5px solid var(--gray-mid);background:#fff;font-family:'Montserrat',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray-text);cursor:pointer;transition:all 0.2s;}
+.scenario-btn:hover{border-color:var(--crimson);color:var(--crimson);background:rgba(112,17,12,0.05);}
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0);}50%{box-shadow:0 0 0 8px rgba(255,215,0,0.45);}}
+.activity-btn.recommended{border-color:var(--gold)!important;background:rgba(255,215,0,0.12)!important;animation:pulse-gold 1.2s ease 2;}
+
+/* ── WORD COUNT ── */
+.prompt-word-count{font-size:0.68rem;font-weight:700;color:var(--gray-mid);margin-top:6px;text-align:right;padding:0 2px;}
+
+/* ── CHATBOT QUICK LINKS (inside prompt-output-wrap) ── */
+.chatbot-quicklinks{margin-top:14px;padding:14px 16px;background:var(--gray-light);border-radius:12px;}
+.chatbot-quicklinks-label{font-size:0.68rem;font-weight:800;color:var(--gray-text);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px;}
+.chatbot-quicklinks-row{display:flex;flex-wrap:wrap;gap:7px;}
+.chatbot-ql-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 15px;border-radius:20px;border:1.5px solid var(--gray-mid);background:#fff;font-family:'Montserrat',sans-serif;font-size:0.73rem;font-weight:700;color:var(--gray-text);text-decoration:none;transition:all 0.18s;}
+.chatbot-ql-btn:hover{border-color:var(--crimson);color:var(--crimson);transform:translateY(-1px);box-shadow:0 2px 8px rgba(112,17,12,0.12);}
+
+/* ── HISTORY CLEAR BUTTON ── */
+.history-clear-btn{font-size:0.65rem;font-weight:700;color:var(--gray-mid);background:none;border:none;cursor:pointer;text-decoration:underline;margin-left:8px;font-family:'Montserrat',sans-serif;padding:0;}
+.history-clear-btn:hover{color:var(--crimson);}
+
+/* ── DARK MODE additions ── */
+@media(prefers-color-scheme:dark){
+  .topic-search{background:#2a1a14;border-color:#4a3a30;color:#f0e8de;}
+  .context-pill{background:rgba(255,215,0,0.08);border-color:rgba(255,215,0,0.2);color:var(--gold-light);}
+  .scenario-btn{background:#2a1a14;border-color:#4a3a30;color:#f0e8de;}
+  .chatbot-quicklinks{background:#2a1a14;}
+  .chatbot-ql-btn{background:#1a0a04;border-color:#4a3a30;color:#f0e8de;}
+  .chatbot-ql-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+}
 </style>
 <!-- Google Analytics 4 · Measurement ID: G-BW9X842TE7 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BW9X842TE7"></script>
@@ -359,7 +407,7 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
     <div class="header-badge">Kappa League · Academic Tools</div>
     <h1>Study <span>Prompt</span> Generator</h1>
     <p>Build powerful, token-efficient AI tutor prompts in seconds — tailored to your grade, level, subject, and goal.</p>
-    <a onclick="openPopup('hiw')" style="display:inline-block;margin-top:12px;color:var(--gold-light);font-weight:700;cursor:pointer;font-size:0.78rem;text-decoration:none;opacity:0.85;letter-spacing:0.3px;">✦ First time here? See how it works →</a>
+    <button onclick="openPopup('hiw')" style="display:inline-block;margin-top:12px;color:var(--gold-light);font-weight:700;cursor:pointer;font-size:0.78rem;text-decoration:none;opacity:0.85;letter-spacing:0.3px;background:none;border:none;font-family:'Montserrat',sans-serif;padding:0;">✦ First time here? See how it works →</button>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
 </header>
@@ -523,16 +571,16 @@ footer{background:var(--crimson-dark);margin-top:48px;padding:28px 24px;}
             Copy Prompt
           </button>
         </div>
+      <div class="prompt-word-count" id="promptWordCount"></div>
       </div>
-    </div>
-    <div class="prompt-word-count" id="promptWordCount"></div>
-    <div class="chatbot-quicklinks">
-      <div class="chatbot-quicklinks-label">Open a chatbot and paste your prompt:</div>
-      <div class="chatbot-quicklinks-row">
-        <a href="https://chat.openai.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">💬 ChatGPT</a>
-        <a href="https://claude.ai/new" target="_blank" rel="noopener" class="chatbot-ql-btn">✨ Claude</a>
-        <a href="https://gemini.google.com/app" target="_blank" rel="noopener" class="chatbot-ql-btn">🔷 Gemini</a>
-        <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">🪟 Copilot</a>
+      <div class="chatbot-quicklinks">
+        <div class="chatbot-quicklinks-label">📋 Copied? Open a chatbot and paste:</div>
+        <div class="chatbot-quicklinks-row">
+          <a href="https://chat.openai.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">💬 ChatGPT</a>
+          <a href="https://claude.ai/new" target="_blank" rel="noopener" class="chatbot-ql-btn">✨ Claude</a>
+          <a href="https://gemini.google.com/app" target="_blank" rel="noopener" class="chatbot-ql-btn">🔷 Gemini</a>
+          <a href="https://copilot.microsoft.com/" target="_blank" rel="noopener" class="chatbot-ql-btn">🪟 Copilot</a>
+        </div>
       </div>
     </div>
     <div class="chatbot-tips">
@@ -785,7 +833,7 @@ function updateRibbon(n){
   if(n<=1){ribbon.classList.remove('visible');return;}
   ribbon.classList.add('visible');
   let html='<span class="ribbon-label">Your selections:</span>';
-  if(state.grade)html+=`<span class="ribbon-chip rc" onclick="goStep(1)"><span class="rc-dot"></span>${state.grade} · ${state.level}</span>`;
+  if(state.grade)html+=`<span class="ribbon-chip rc" onclick="goStep(1)"><span class="rc-dot"></span>${state.grade}${state.level?' · '+state.level:''}</span>`;
   if(state.subject&&n>2)html+=`<span class="ribbon-chip rc" onclick="goStep(2)"><span class="rc-dot"></span>${state.subject}</span>`;
   if(state.topic&&n>3)html+=`<span class="ribbon-chip rc" onclick="goStep(3)"><span class="rc-dot"></span>${state.topic}</span>`;
   if(state.activity&&n>4)html+=`<span class="ribbon-chip rc" onclick="goStep(4)"><span class="rc-dot"></span>${state.activity}</span>`;
@@ -882,8 +930,10 @@ function fallbackCopy(text,cb){
 }
 
 /* ── POPUPS ── */
+let _modalTrigger = null;
 function openPopup(key){
   const d=popupData[key];if(!d)return;
+  _modalTrigger = document.activeElement;
   document.getElementById('modalBadge').textContent=d.badge;
   document.getElementById('modalIcon').textContent=d.icon;
   document.getElementById('modalTitle').textContent=d.title;
@@ -892,16 +942,36 @@ function openPopup(key){
   document.getElementById('modalSteps').innerHTML=d.steps.map((s,i)=>`<div class="modal-step"><div class="modal-step-num">${i+1}</div><div class="modal-step-text">${s.text}</div></div>`).join('');
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  setTimeout(()=>{ const cb=document.querySelector('#modalBox .modal-close'); if(cb)cb.focus(); },50);
 }
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+  if(_modalTrigger&&_modalTrigger.focus){_modalTrigger.focus();_modalTrigger=null;}
+}
 function closePopupOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+/* ── MODAL FOCUS TRAP (single delegated listener) ── */
+document.addEventListener('keydown',function(e){
+  const overlay=document.getElementById('modalOverlay');
+  if(!overlay.classList.contains('open'))return;
+  if(e.key==='Escape'){closeModal();return;}
+  if(e.key==='Tab'){
+    const box=document.getElementById('modalBox');
+    const focusable=Array.from(box.querySelectorAll('button,[href],input,[tabindex]:not([tabindex="-1"])')).filter(el=>!el.disabled);
+    if(!focusable.length)return;
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(e.shiftKey){if(document.activeElement===first){last.focus();e.preventDefault();}}
+    else{if(document.activeElement===last){first.focus();e.preventDefault();}}
+  }
+});
 
 /* ── Share & QR ── */
 function shareToolLink(){
   const url=window.location.href.split('?')[0]+(window.location.search||'');
   const notice=document.getElementById('shareNotice');
   function copied(){notice.textContent='✓ Link copied!';setTimeout(()=>notice.textContent='',2500);}
-  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url});}
+  if(navigator.share){navigator.share({title:'Kappa League Study Tools',url}).catch(err=>{if(err.name!=='AbortError')console.warn(err);});}
   else if(navigator.clipboard){navigator.clipboard.writeText(url).then(copied);}
   else{copied();}
 }
@@ -922,39 +992,14 @@ function downloadPrompt(){
   const filename=`KL_${subject}_${topic}_${activity}`.replace(/[^a-zA-Z0-9_]/g,'_').replace(/_+/g,'_')+'.txt';
   const blob=new Blob([text],{type:'text/plain'});
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);a.download=filename;a.click();
-  URL.revokeObjectURL(a.href);
-}
-/* ── KEYBOARD NAVIGATION ── */
-document.addEventListener('keydown', function(e) {
-  // Escape closes modal
-  if (e.key === 'Escape') {
-    const overlay = document.getElementById('modalOverlay');
-    if (overlay.classList.contains('open')) { closeModal(); return; }
-    const hoverlay = document.getElementById('hmodalOverlay');
-    if (hoverlay && hoverlay.classList.contains('open')) { return; }
-  }
-});
-
-/* ── FOCUS TRAP in modal ── */
-function trapFocus(el) {
-  const focusable = el.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-  const first = focusable[0], last = focusable[focusable.length - 1];
-  el.addEventListener('keydown', function trap(e) {
-    if (e.key !== 'Tab') return;
-    if (e.shiftKey) { if (document.activeElement === first) { last.focus(); e.preventDefault(); } }
-    else { if (document.activeElement === last) { first.focus(); e.preventDefault(); } }
-  });
+  const blobUrl=URL.createObjectURL(blob);a.href=blobUrl;a.download=filename;a.click();
+  setTimeout(()=>URL.revokeObjectURL(blobUrl),1000);
 }
 
-// Wire up focus trap and auto-focus modal on open
-const _origOpenPopup = openPopup;
-function openPopup(key) {
-  _origOpenPopup(key);
-  const box = document.getElementById('modalBox');
-  const closeBtn = box.querySelector('.modal-close');
-  setTimeout(() => { closeBtn && closeBtn.focus(); trapFocus(box); }, 50);
-}
+
+
+
+/* focus trap and open handled in openPopup() above */
 
 /* ── LOCALSTORAGE HISTORY ── */
 function saveToStorage(){

@@ -650,10 +650,10 @@ footer{background:var(--crimson-deeper);padding:48px 24px 28px;}
     </div>
     <div class="footer-col">
       <div class="footer-col-title">Free Chatbots</div>
-      <a href="https://chat.openai.com" target="_blank">ChatGPT (OpenAI)</a>
-      <a href="https://claude.ai" target="_blank">Claude (Anthropic)</a>
-      <a href="https://gemini.google.com" target="_blank">Gemini (Google)</a>
-      <a href="https://copilot.microsoft.com" target="_blank">Copilot (Microsoft)</a>
+      <a href="https://chat.openai.com" target="_blank" rel="noopener">ChatGPT (OpenAI)</a>
+      <a href="https://claude.ai" target="_blank" rel="noopener">Claude (Anthropic)</a>
+      <a href="https://gemini.google.com" target="_blank" rel="noopener">Gemini (Google)</a>
+      <a href="https://copilot.microsoft.com" target="_blank" rel="noopener">Copilot (Microsoft)</a>
     </div>
   </div>
   <div class="footer-bottom">
@@ -726,6 +726,7 @@ const heroPopupData = {
   }
 };
 
+let _heroModalTrigger = null;
 function openHeroPopup(key) {
   const d = heroPopupData[key];
   if (!d) return;
@@ -742,11 +743,14 @@ function openHeroPopup(key) {
   const overlay = document.getElementById('hmodalOverlay');
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  _heroModalTrigger = document.activeElement;
+  setTimeout(()=>{ const cb=document.querySelector('#hmodalBox .hmodal-close'); if(cb)cb.focus(); },50);
 }
 
 function closeHmodal() {
   document.getElementById('hmodalOverlay').classList.remove('open');
   document.body.style.overflow = '';
+  if(_heroModalTrigger&&_heroModalTrigger.focus){_heroModalTrigger.focus();_heroModalTrigger=null;}
 }
 
 function closeHeroPopup(e) {
@@ -758,7 +762,7 @@ function shareHome() {
   const url = 'https://mdtaylor79.github.io/Kappa-League-AI-Study-Tools/';
   const notice = document.getElementById('shareNoticeHome');
   function copied() { notice.textContent = '✓ Link copied!'; setTimeout(() => notice.textContent = '', 2500); }
-  if (navigator.share) { navigator.share({ title: 'Kappa League Study Tools', url }); }
+  if (navigator.share) { navigator.share({ title: 'Kappa League Study Tools', url }).catch(err=>{if(err.name!=='AbortError')console.warn(err);}); }
   else if (navigator.clipboard) { navigator.clipboard.writeText(url).then(copied); }
   else { copied(); }
 }
@@ -766,11 +770,26 @@ function toggleHomeQR() {
   const el = document.getElementById('homeQR');
   el.style.display = el.style.display === 'none' || !el.style.display ? 'block' : 'none';
 }
+/* ── HOME MODAL KEYBOARD ── */
+document.addEventListener('keydown',function(e){
+  const overlay=document.getElementById('hmodalOverlay');
+  if(!overlay||!overlay.classList.contains('open'))return;
+  if(e.key==='Escape'){closeHmodal();return;}
+  if(e.key==='Tab'){
+    const box=document.getElementById('hmodalBox');
+    const focusable=Array.from(box.querySelectorAll('button,[href],input,[tabindex]:not([tabindex="-1"])')).filter(el=>!el.disabled);
+    if(!focusable.length)return;
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(e.shiftKey){if(document.activeElement===first){last.focus();e.preventDefault();}}
+    else{if(document.activeElement===last){first.focus();e.preventDefault();}}
+  }
+});
+
 </script>
 <!-- ══ HERO SECTION POPUPS ══ -->
-<div class="hmodal-overlay" id="hmodalOverlay" onclick="closeHeroPopup(event)">
+<div class="hmodal-overlay" id="hmodalOverlay" onclick="closeHeroPopup(event)" role="dialog" aria-modal="true" aria-labelledby="hmodalTitle">
   <div class="hmodal-box" id="hmodalBox">
-    <button class="hmodal-close" onclick="closeHmodal()">&times;</button>
+    <button class="hmodal-close" onclick="closeHmodal()" aria-label="Close">&times;</button>
     <div class="hmodal-badge" id="hmodalBadge"></div>
     <div class="hmodal-icon" id="hmodalIcon"></div>
     <h2 class="hmodal-title" id="hmodalTitle"></h2>
